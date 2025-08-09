@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>波羅的海+赫爾辛基 12天行程地圖</title>
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+<style>
+  body, html {
+    margin:0; padding:0; height:100%;
+    font-family: Arial, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #map {
+    position: fixed;
+    top:0; bottom:0; left:0; right:0;
+    z-index: 1;
+  }
+  #sidebar {
+    position: fixed;
+    top: 0; bottom: 0; left: 0;
+    width: 280px;
+    max-width: 80vw;
+    background: #fff;
+    overflow-y: auto;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+    padding: 10px 15px;
+    z-index: 1000;
+    transform: translateX(-300px);
+    transition: transform 0.3s ease;
+  }
+  #sidebar.visible {
+    transform: translateX(0);
+  }
+  #toggleSidebarBtn {
+    position: fixed;
+    top: 15px; left: 15px;
+    z-index: 1100;
+    background: #0078d7;
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  }
+  #toggleSidebarBtn:active {
+    background: #005fa3;
+  }
+  ul.tree, ul.tree ul {
+    list-style: none;
+    padding-left: 1em;
+  }
+  ul.tree {
+    margin: 0;
+  }
+  ul.tree ul {
+    margin-left: 10px;
+  }
+  ul.tree li {
+    margin: 0.3em 0;
+  }
+  button.toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1em;
+    padding: 4px;
+    color: #0078d7;
+    text-align: left;
+    width: 100%;
+  }
+  button.toggle:focus {
+    outline: 2px solid #0078d7;
+  }
+  li.place > button {
+    font-weight: normal;
+    font-size: 0.9em;
+    color: #333;
+    white-space: normal;
+  }
+  .place-name {
+    font-weight: 600;
+  }
+  .desc {
+    font-size: 0.85em;
+    color: #666;
+  }
+  li.expanded > button.toggle {
+    font-weight: 700;
+  }
+  @media (max-width: 600px) {
+    #sidebar {
+      width: 80vw;
+    }
+  }
+</style>
+</head>
+<body>
+<button id="toggleSidebarBtn" aria-label="切換行程側邊欄">行程</button>
+<div id="sidebar" aria-label="行程目錄" role="navigation"></div>
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const itinerary = [
+  {
+    city: "維爾紐斯 / Vilnius",
+    days: [
+      {
+        day: "Day 1",
+        title: "維爾紐斯市區 Day 1",
+        places: [
+          {name_cn:"黎明之門",name_en:"Gate of Dawn",lat:54.6872,lon:25.2887,desc_cn:"維爾紐斯著名古城門",desc_en:"Famous old city gate"},
+          {name_cn:"聖泰瑞莎教堂",name_en:"St. Theresa's Church",lat:54.6865,lon:25.2880,desc_cn:"巴洛克風格教堂",desc_en:"Baroque style church"},
+          {name_cn:"聖三一教堂",name_en:"Holy Trinity Church",lat:54.6860,lon:25.2870,desc_cn:"重要的宗教建築",desc_en:"Important religious building"},
+          {name_cn:"立陶宛國家愛樂協會",name_en:"Lithuanian National Philharmonic",lat:54.6880,lon:25.2810,desc_cn:"音樂表演場地",desc_en:"Music performance venue"},
+          {name_cn:"維爾紐斯市政廳",name_en:"Vilnius Town Hall",lat:54.6875,lon:25.2830,desc_cn:"城市行政中心",desc_en:"City administration center"}
+        ]
+      },
+      {
+        day: "Day 2",
+        title: "維爾紐斯市區 Day 2",
+        places: [
+          {name_cn:"皮利斯街",name_en:"Pilies Street",lat:54.6882,lon:25.2800,desc_cn:"熱鬧街道與商店",desc_en:"Lively street with shops"},
+          {name_cn:"簽署之屋",name_en:"House of Signatories",lat:54.6878,lon:25.2795,desc_cn:"立陶宛獨立宣言簽署地",desc_en:"Site of independence signing"},
+          {name_cn:"文學街",name_en:"Literature Street",lat:54.6870,lon:25.2820,desc_cn:"特色壁畫街",desc_en:"Street of literary murals"},
+          {name_cn:"琥珀博物館",name_en:"Amber Museum",lat:54.6870,lon:25.2800,desc_cn:"展示琥珀寶石",desc_en:"Exhibits amber gems"},
+          {name_cn:"立陶宛總統府",name_en:"Presidential Palace",lat:54.6873,lon:25.2795,desc_cn:"總統辦公地點",desc_en:"President's office"},
+          {name_cn:"維爾紐斯大學",name_en:"Vilnius University",lat:54.6852,lon:25.2801,desc_cn:"歷史悠久的大學",desc_en:"Historic university"}
+        ]
+      },
+      {
+        day: "Day 3",
+        title: "維爾紐斯 + 特拉凱一日遊",
+        places: [
+          {name_cn:"維爾紐斯主教座堂",name_en:"Vilnius Cathedral",lat:54.6883,lon:25.2832,desc_cn:"哥德式教堂",desc_en:"Gothic church"},
+          {name_cn:"主教座堂鐘塔",name_en:"Cathedral Bell Tower",lat:54.6880,lon:25.2830,desc_cn:"著名鐘塔",desc_en:"Famous bell tower"},
+          {name_cn:"奇蹟地磚",name_en:"Miracle Tiles",lat:54.6885,lon:25.2837,desc_cn:"傳說帶來好運的地磚",desc_en:"Legendary lucky tiles"},
+          {name_cn:"格迪米納斯塔",name_en:"Gediminas Tower",lat:54.6882,lon:25.2840,desc_cn:"維爾紐斯地標",desc_en:"Vilnius landmark"},
+          {name_cn:"聖安妮教堂",name_en:"St. Anne's Church",lat:54.6886,lon:25.2835,desc_cn:"哥德式教堂",desc_en:"Gothic church"},
+          {name_cn:"聖母主教座堂",name_en:"Church of St. Mary",lat:54.6885,lon:25.2835,desc_cn:"重要教堂",desc_en:"Important church"},
+          {name_cn:"對岸共和國",name_en:"Republic of Užupis",lat:54.6870,lon:25.2940,desc_cn:"藝術家共和國",desc_en:"Artists' republic"},
+          {name_cn:"【城市移動】前往特拉凱（約30-40分鐘）",name_en:"[Travel] To Trakai (~30-40 min)",lat:54.6880,lon:25.2830,desc_cn:"",desc_en:""}
+        ]
+      }
+    ]
+  },
+  {
+    city: "特拉凱 / Trakai",
+    days: [
+      {
+        day: "Day 3",
+        title: "特拉凱一日遊",
+        places: [
+          {name_cn:"特拉凱城堡",name_en:"Trakai Castle",lat:54.6445,lon:24.9345,desc_cn:"湖中城堡",desc_en:"Castle on lake"},
+          {name_cn:"特拉凱湖",name_en:"Lake Galvė",lat:54.6440,lon:24.9360,desc_cn:"城堡湖泊",desc_en:"Lake by castle"},
+          {name_cn:"特拉凱歷史博物館",name_en:"Trakai History Museum",lat:54.6445,lon:24.9350,desc_cn:"介紹特拉凱歷史",desc_en:"Trakai history museum"}
+        ]
+      }
+    ]
+  },
+  {
+    city: "里加 / Riga",
+    days: [
+      {
+        day: "Day 4",
+        title: "里加市區 Day 1",
+        places: [
+          {name_cn:"【城市移動】維爾紐斯→里加 約4-5小時",name_en:"[Travel] Vilnius → Riga (~4-5h)",lat:56.95,lon:24.1,desc_cn:"",desc_en:""},
+          {name_cn:"自由紀念碑",name_en:"Freedom Monument",lat:56.9519,lon:24.1136,desc_cn:"拉脫維亞獨立象徵",desc_en:"Symbol of Latvian independence"},
+          {name_cn:"萊瑪時鐘",name_en:"Laima Clock",lat:56.9502,lon:24.1125,desc_cn:"著名地標時鐘",desc_en:"Famous landmark clock"},
+          {name_cn:"拉脫維亞國家歌劇院",name_en:"Latvian National Opera",lat:56.9501,lon:24.1120,desc_cn:"歌劇院",desc_en:"Opera house"},
+          {name_cn:"聖彼得教堂",name_en:"St. Peter's Church",lat:56.9508,lon:24.1098,desc_cn:"古老教堂",desc_en:"Historic church"},
+          {name_cn:"市政廳廣場",name_en:"Town Hall Square",lat:56.9514,lon:24.1110,desc_cn:"市中心廣場",desc_en:"Central square"},
+          {name_cn:"黑頭宮",name_en:"House of the Blackheads",lat:56.9512,lon:24.1105,desc_cn:"中世紀建築",desc_en:"Medieval building"},
+          {name_cn:"羅蘭雕像",name_en:"Roland Statue",lat:56.9513,lon:24.1113,desc_cn:"象徵司法與權力",desc_en:"Symbol of justice and power"},
+          {name_cn:"槍手廣場",name_en:"Gunpowder Square",lat:56.9515,lon:24.1090,desc_cn:"歷史地點",desc_en:"Historic site"}
+        ]
+      },
+      {
+        day: "Day 5",
+        title: "里加市區 Day 2",
+        places: [
+          {name_cn:"圓頂廣場",name_en:"Dome Square",lat:56.9517,lon:24.1095,desc_cn:"歷史廣場",desc_en:"Historic square"},
+          {name_cn:"里加主教座堂",name_en:"Riga Cathedral",lat:56.9519,lon:24.1087,desc_cn:"大型教堂",desc_en:"Large cathedral"},
+          {name_cn:"里加城堡",name_en:"Riga Castle",lat:56.9515,lon:24.1102,desc_cn:"城堡建築",desc_en:"Castle building"},
+          {name_cn:"聖雅各主教座堂",name_en:"St. Jacob's Cathedral",lat:56.9512,lon:24.1090,desc_cn:"重要教堂",desc_en:"Important church"},
+          {name_cn:"拉脫維亞國會",name_en:"Latvian Parliament",lat:56.9518,lon:24.1107,desc_cn:"國會建築",desc_en:"Parliament building"},
+          {name_cn:"里加三兄弟",name_en:"Three Brothers",lat:56.9516,lon:24.1110,desc_cn:"歷史建築群",desc_en:"Historic buildings"},
+          {name_cn:"瑞典門",name_en:"Swedish Gate",lat:56.9513,lon:24.1095,desc_cn:"古城門",desc_en:"Old city gate"},
+          {name_cn:"里加城牆",name_en:"Riga City Wall",lat:56.9510,lon:24.1100,desc_cn:"古城牆遺址",desc_en:"City wall ruins"},
+          {name_cn:"雅各布營房",name_en:"Jacob Barracks",lat:56.9509,lon:24.1098,desc_cn:"歷史建築",desc_en:"Historic barracks"},
+          {name_cn:"里加火藥塔",name_en:"Powder Tower",lat:56.9508,lon:24.1097,desc_cn:"古老炮塔",desc_en:"Old tower"},
+          {name_cn:"里維廣場",name_en:"Livu Square",lat:56.9505,lon:24.1089,desc_cn:"熱鬧廣場",desc_en:"Lively square"},
+          {name_cn:"里加貓之屋",name_en:"Cat House",lat:56.9507,lon:24.1091,desc_cn:"奇特建築",desc_en:"Unique building"},
+          {name_cn:"大小基爾特之屋",name_en:"Great and Small Guild Halls",lat:56.9511,lon:24.1100,desc_cn:"古老公會建築",desc_en:"Old guild halls"},
+          {name_cn:"聖誕主教座堂",name_en:"St. Gertrude's Cathedral",lat:56.9514,lon:24.1115,desc_cn:"教堂建築",desc_en:"Church building"},
+          {name_cn:"新藝術建築群",name_en:"Art Nouveau District",lat:56.9520,lon:24.1120,desc_cn:"著名建築群",desc_en:"Famous architecture district"}
+        ]
+      }
+    ]
+  },
+  {
+    city: "塔林 / Tallinn",
+    days: [
+      {
+        day: "Day 6",
+        title: "塔林市區 下城區",
+        places: [
+          {name_cn:"維魯門",name_en:"Viru Gate",lat:59.4366,lon:24.7501,desc_cn:"中世紀城門",desc_en:"Medieval gate"},
+          {name_cn:"市政廳",name_en:"Town Hall",lat:59.4370,lon:24.7454,desc_cn:"歷史建築",desc_en:"Historic building"},
+          {name_cn:"聖尼古拉教堂",name_en:"St. Nicholas Church",lat:59.4375,lon:24.7465,desc_cn:"博物館與教堂",desc_en:"Museum and church"},
+          {name_cn:"市政廳藥局",name_en:"Town Hall Pharmacy",lat:59.4371,lon:24.7452,desc_cn:"歷史藥局",desc_en:"Historic pharmacy"},
+          {name_cn:"聖靈教堂",name_en:"Church of the Holy Spirit",lat:59.4378,lon:24.7468,desc_cn:"教堂",desc_en:"Church"},
+          {name_cn:"大基爾特之屋",name_en:"Great Guild Hall",lat:59.4373,lon:24.7460,desc_cn:"中世紀會館",desc_en:"Medieval guild hall"},
+          {name_cn:"黑人頭兄弟會",name_en:"House of the Blackheads",lat:59.4374,lon:24.7459,desc_cn:"歷史建築",desc_en:"Historic building"},
+          {name_cn:"聖奧拉夫教堂",name_en:"St. Olaf's Church",lat:59.4413,lon:24.7475,desc_cn:"古老教堂",desc_en:"Ancient church"},
+          {name_cn:"三姊妹",name_en:"Three Sisters",lat:59.4367,lon:24.7505,desc_cn:"中世紀住宅",desc_en:"Medieval houses"},
+          {name_cn:"大海岸城門",name_en:"Great Coastal Gate",lat:59.4368,lon:24.7498,desc_cn:"古城門",desc_en:"Old coastal gate"}
+        ]
+      },
+      {
+        day: "Day 7",
+        title: "塔林市區 上城區",
+        places: [
+          {name_cn:"自由廣場",name_en:"Freedom Square",lat:59.4362,lon:24.7530,desc_cn:"市中心廣場",desc_en:"City center square"},
+          {name_cn:"聖約翰教堂",name_en:"St. John's Church",lat:59.4370,lon:24.7536,desc_cn:"教堂",desc_en:"Church"},
+          {name_cn:"防禦工事博物館",name_en:"Museum of Defence",lat:59.4375,lon:24.7540,desc_cn:"博物館",desc_en:"Museum"},
+          {name_cn:"座堂山城堡",name_en:"Toompea Castle",lat:59.4381,lon:24.7536,desc_cn:"古堡",desc_en:"Ancient castle"},
+          {name_cn:"亞歷山大涅夫斯基主教座堂",name_en:"Alexander Nevsky Cathedral",lat:59.4380,lon:24.7534,desc_cn:"東正教大教堂",desc_en:"Orthodox cathedral"},
+          {name_cn:"塔林聖母主教座堂",name_en:"St. Mary's Cathedral",lat:59.4382,lon:24.7535,desc_cn:"教堂",desc_en:"Cathedral"},
+          {name_cn:"口圖觀景台",name_en:"Kohtuotsa Viewing Platform",lat:59.4385,lon:24.7533,desc_cn:"觀景台",desc_en:"Viewing platform"},
+          {name_cn:"帕特苦莉觀景台",name_en:"Patkuli Viewing Platform",lat:59.4384,lon:24.7532,desc_cn:"觀景台",desc_en:"Viewing platform"},
+          {name_cn:"telliskivi creative city",name_en:"Telliskivi Creative City",lat:59.4367,lon:24.7270,desc_cn:"創意園區",desc_en:"Creative hub"},
+          {name_cn:"戶外博物館",name_en:"Open Air Museum",lat:59.4370,lon:24.7210,desc_cn:"露天博物館",desc_en:"Open air museum"},
+          {name_cn:"愛沙尼亞藝術博物館",name_en:"Estonian Art Museum",lat:59.4373,lon:24.7370,desc_cn:"藝術博物館",desc_en:"Art museum"},
+          {name_cn:"卡利柯治皇宮",name_en:"Kadriorg Palace",lat:59.4361,lon:24.7492,desc_cn:"巴洛克風宮殿",desc_en:"Baroque palace"}
+        ]
+      },
+      {
+        day: "Day 8",
+        title: "塔林市區 自由補充行程",
+        places: [
+          {name_cn:"Kalamaja 港區",name_en:"Kalamaja",lat:59.4390,lon:24.7400,desc_cn:"文青區",desc_en:"Hipster district"},
+          {name_cn:"海洋博物館",name_en:"Seaplane Harbour Museum",lat:59.4469,lon:24.7253,desc_cn:"海事博物館",desc_en:"Maritime museum"}
+        ]
+      }
+    ]
+  },
+  {
+    city: "赫爾辛基 / Helsinki",
+    days: [
+      {
+        day: "Day 9",
+        title: "赫爾辛基市區 Day 1",
+        places: [
+          {name_cn:"【城市移動】塔林→赫爾辛基 渡輪約2小時",name_en:"[Travel] Tallinn → Helsinki (Ferry ~2h)",lat:60.1695,lon:24.9354,desc_cn:"",desc_en:""},
+          {name_cn:"赫爾辛基中央車站",name_en:"Helsinki Central Station",lat:60.1719,lon:24.9414,desc_cn:"交通樞紐",desc_en:"Transport hub"},
+          {name_cn:"阿黛濃美術館",name_en:"Ateneum Art Museum",lat:60.1691,lon:24.9410,desc_cn:"藝術博物館",desc_en:"Art museum"},
+          {name_cn:"參議院廣場",name_en:"Senate Square",lat:60.1690,lon:24.9515,desc_cn:"市中心廣場",desc_en:"City center square"},
+          {name_cn:"主教座堂",name_en:"Helsinki Cathedral",lat:60.1695,lon:24.9525,desc_cn:"新古典主義教堂",desc_en:"Neoclassical church"},
+          {name_cn:"烏斯佩斯基大教堂",name_en:"Uspenski Cathedral",lat:60.1692,lon:24.9640,desc_cn:"東正教大教堂",desc_en:"Orthodox cathedral"}
+        ]
+      },
+      {
+        day: "Day 10",
+        title: "赫爾辛基市區 Day 2",
+        places: [
+          {name_cn:"集市廣場",name_en:"Market Square",lat:60.1689,lon:24.9511,desc_cn:"傳統市集",desc_en:"Traditional market"},
+          {name_cn:"老農貿市場",name_en:"Old Market Hall",lat:60.1685,lon:24.9472,desc_cn:"市場",desc_en:"Market hall"},
+          {name_cn:"埃斯普拉納迪公園",name_en:"Esplanadi Park",lat:60.1696,lon:24.9458,desc_cn:"城市公園",desc_en:"City park"},
+          {name_cn:"康皮教堂",name_en:"Kamppi Chapel",lat:60.1692,lon:24.9330,desc_cn:"安靜教堂",desc_en:"Quiet chapel"},
+          {name_cn:"岩石教堂",name_en:"Rock Church",lat:60.1733,lon:24.9269,desc_cn:"岩石雕刻教堂",desc_en:"Church carved in rock"}
+        ]
+      },
+      {
+        day: "Day 11",
+        title: "赫爾辛基市區 Day 3",
+        places: [
+          {name_cn:"西貝流士紀念碑",name_en:"Sibelius Monument",lat:60.1845,lon:24.8869,desc_cn:"紀念音樂家",desc_en:"Music monument"},
+          {name_cn:"芬蘭堡",name_en:"Suomenlinna Fortress",lat:60.1470,lon:24.9930,desc_cn:"海上堡壘",desc_en:"Sea fortress"}
+        ]
+      },
+      {
+        day: "Day 12",
+        title: "赫爾辛基市區 自由活動",
+        places: [
+          {name_cn:"自由活動",name_en:"Free Activities",lat:60.1690,lon:24.9410,desc_cn:"購物、休息或補充景點",desc_en:"Shopping, rest or extra spots"}
+        ]
+      }
+    ]
+  }
+];
+
+// 地圖初始化
+const map = L.map("map").setView([59.4370, 24.7536], 6);
+
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  maxZoom: 19,
+  attribution: '© OpenStreetMap contributors'
+}).addTo(map);
+
+let currentMarker = null;
+function clearMarker() {
+  if (currentMarker) {
+    map.removeLayer(currentMarker);
+    currentMarker = null;
+  }
+}
+
+// 修改：用城市名稱+景點名組成Google地圖搜尋連結
+function addMarker(place, cityName = "") {
+  clearMarker();
+  if (!place.lat || !place.lon) return;
+
+  currentMarker = L.marker([place.lat, place.lon]).addTo(map);
+
+  // 組合搜尋字串，城市+景點名稱
+  const query = encodeURIComponent((cityName ? cityName + " " : "") + place.name_cn);
+  const googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
+
+  const popupContent = `
+    <strong>${place.name_cn} / ${place.name_en}</strong><br>
+    <em>${place.desc_cn}</em><br>
+    <em>${place.desc_en}</em><br>
+    <a href="${googleMapUrl}" target="_blank" rel="noopener noreferrer">在 Google 地圖中開啟</a>
+  `;
+
+  currentMarker.bindPopup(popupContent).openPopup();
+  map.setView([place.lat, place.lon], 21); // Zoom in
+}
+
+// 側邊欄建構
+const sidebar = document.getElementById("sidebar");
+function createPlaceItem(place, cityName) {
+  const li = document.createElement("li");
+  li.className = "place";
+  const btn = document.createElement("button");
+  btn.textContent = place.name_cn + (place.name_en ? " / " + place.name_en : "");
+  btn.title = place.desc_cn + (place.desc_en ? " / " + place.desc_en : "");
+  btn.addEventListener("click", () => {
+    addMarker(place, cityName);
+    sidebar.classList.remove("visible"); // 點擊後隱藏側邊欄
+  });
+  li.appendChild(btn);
+  if(place.desc_cn || place.desc_en){
+    const desc = document.createElement("div");
+    desc.className = "desc";
+    desc.innerHTML = place.desc_cn + (place.desc_en ? "<br>" + place.desc_en : "");
+    li.appendChild(desc);
+  }
+  return li;
+}
+function createDayItem(day, cityName) {
+  const li = document.createElement("li");
+  const btn = document.createElement("button");
+  btn.className = "toggle";
+  btn.textContent = `${day.day} - ${day.title}`;
+  btn.setAttribute("aria-expanded", "false");
+  btn.addEventListener("click", () => {
+    const expanded = btn.getAttribute("aria-expanded") === "true";
+    btn.setAttribute("aria-expanded", !expanded);
+    li.classList.toggle("expanded");
+    ul.style.display = expanded ? "none" : "block";
+  });
+  li.appendChild(btn);
+
+  const ul = document.createElement("ul");
+  ul.style.display = "none";
+
+  day.places.forEach(place => {
+    ul.appendChild(createPlaceItem(place, cityName));
+  });
+
+  li.appendChild(ul);
+  return li;
+}
+function createCityItem(city) {
+  const li = document.createElement("li");
+  const btn = document.createElement("button");
+  btn.className = "toggle";
+  btn.textContent = city.city;
+  btn.setAttribute("aria-expanded", "false");
+  btn.addEventListener("click", () => {
+    const expanded = btn.getAttribute("aria-expanded") === "true";
+    btn.setAttribute("aria-expanded", !expanded);
+    li.classList.toggle("expanded");
+    ul.style.display = expanded ? "none" : "block";
+  });
+  li.appendChild(btn);
+
+  const ul = document.createElement("ul");
+  ul.style.display = "none";
+
+  city.days.forEach(day => {
+    ul.appendChild(createDayItem(day, city.city));
+  });
+
+  li.appendChild(ul);
+  return li;
+}
+function buildSidebar() {
+  const ul = document.createElement("ul");
+  ul.className = "tree";
+
+  itinerary.forEach(city => {
+    ul.appendChild(createCityItem(city));
+  });
+
+  sidebar.appendChild(ul);
+}
+buildSidebar();
+
+// 側邊欄切換
+const toggleBtn = document.getElementById("toggleSidebarBtn");
+toggleBtn.addEventListener("click", () => {
+  sidebar.classList.toggle("visible");
+});
+
+// 根據日期預設展開對應行程
+window.addEventListener("load", () => {
+  // 日期只取年月日
+  function dateOnly(date) {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  }
+  const today = dateOnly(new Date());
+  const start = dateOnly(startDate);
+
+  let dayOffset = Math.floor((today - start) / (1000 * 60 * 60 * 24));
+  const totalDays = itinerary.reduce((acc, city) => acc + city.days.length, 0);
+
+  if(dayOffset < 0 || dayOffset >= totalDays){
+    dayOffset = 0; // 如果日期不在行程範圍內，就預設0 (Day 1)
+  }
+  console.log("今天日期", today.toISOString().slice(0,10));
+  console.log("計算 DayOffset =", dayOffset);
+
+  // 找到城市與天數索引
+  let cumulativeDays = 0;
+  let cityIndex = 0, dayIndex = 0;
+  for(let i=0; i<itinerary.length; i++){
+    if(dayOffset < cumulativeDays + itinerary[i].days.length){
+      cityIndex = i;
+      dayIndex = dayOffset - cumulativeDays;
+      break;
+    }
+    cumulativeDays += itinerary[i].days.length;
+  }
+  console.log("展開城市 index:", cityIndex, "展開天數 index:", dayIndex);
+
+
+  // 延遲展開，確保側邊欄渲染完成
+  setTimeout(() => {
+    const cityBtns = sidebar.querySelectorAll("li > button.toggle");
+    if(cityBtns[cityIndex]){
+      cityBtns[cityIndex].click();
+      const cityLi = cityBtns[cityIndex].parentElement;
+      const dayBtns = cityLi.querySelectorAll("ul > li > button.toggle");
+      if(dayBtns[dayIndex]){
+        dayBtns[dayIndex].click();
+
+        // 點擊第一個景點
+        const firstPlaceBtn = cityLi.querySelector(`ul > li:nth-child(${dayIndex + 1}) ul li.place button`);
+        if(firstPlaceBtn){
+          firstPlaceBtn.click();
+        }
+      }
+    }
+    sidebar.classList.add("visible");
+  }, 300);
+});
+</script>
+</body>
+</html>
