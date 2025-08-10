@@ -133,49 +133,15 @@
         </header>
 
         <nav class="flex justify-center border-b border-gray-200 mb-8 overflow-x-auto pb-2">
-            <button data-target="overview" class="nav-btn p-4 text-lg font-medium text-gray-500 active">總覽</button>
-            <button data-target="daily-plan" class="nav-btn p-4 text-lg font-medium text-gray-500">每日行程</button>
+            <button data-target="daily-plan" class="nav-btn p-4 text-lg font-medium text-gray-500 active">每日行程</button>
             <button data-target="attractions" class="nav-btn p-4 text-lg font-medium text-gray-500">探索景點</button>
             <button data-target="cuisine" class="nav-btn p-4 text-lg font-medium text-gray-500">美食</button>
-            <button data-target="museums" class="nav-btn p-4 text-lg font-medium text-gray-500">博物館與美術館</button>
             <button data-target="transport" class="nav-btn p-4 text-lg font-medium text-gray-500">交通攻略</button>
             <button data-target="info" class="nav-btn p-4 text-lg font-medium text-gray-500">住宿與提示</button>
         </nav>
 
         <main>
-            <section id="overview" class="content-section active">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold mb-2">概覽與比較</h2>
-                    <p class="text-gray-600 max-w-3xl mx-auto">歡迎來到波羅的海與芬蘭互動指南！本區塊提供四國的地理位置與基本數據比較，讓您對這片迷人的土地有初步的認識。您可以點擊下方的地圖區塊來查看各國首都。</p>
-                </div>
-                <div class="grid md:grid-cols-2 gap-8 items-center">
-                    <div class="bg-white p-6 rounded-xl shadow-md">
-                        <h3 class="text-xl font-bold text-center mb-4">四國地理位置</h3>
-                        <div id="map-container" class="relative w-full aspect-square max-w-md mx-auto flex flex-col items-center justify-center space-y-2">
-                            <div data-country="finland" class="map-country w-44 h-28 bg-blue-200 rounded-lg flex items-center justify-center text-blue-800 font-bold text-lg cursor-pointer transition-transform hover:scale-105">芬蘭</div>
-                            <div data-country="estonia" class="map-country w-40 h-24 bg-teal-200 rounded-lg flex items-center justify-center text-teal-800 font-bold text-lg cursor-pointer transition-transform hover:scale-105">愛沙尼亞</div>
-                            <div data-country="latvia" class="map-country w-44 h-28 bg-orange-200 rounded-lg flex items-center justify-center text-orange-800 font-bold text-lg cursor-pointer transition-transform hover:scale-105">拉脫維亞</div>
-                            <div data-country="lithuania" class="map-country w-48 h-32 bg-green-200 rounded-lg flex items-center justify-center text-green-800 font-bold text-lg cursor-pointer transition-transform hover:scale-105">立陶宛</div>
-                        </div>
-                        <p id="map-info" class="text-center mt-4 text-gray-700 font-semibold h-6">點擊國家以查看首都</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl shadow-md">
-                        <h3 class="text-xl font-bold text-center mb-4">國土面積比較 (平方公里)</h3>
-                        <div class="chart-container">
-                            <canvas id="country-size-chart"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-white rounded-xl shadow-lg p-6 max-w-4xl mx-auto mt-8">
-                    <h3 class="text-xl font-semibold text-stone-700 mb-4 text-center">旅程時間分配</h3>
-                    <p class="text-stone-500 mb-6 text-center">這趟旅程將均衡地分配在四個國家，讓您有充足的時間感受每個地方的獨特魅力。點擊圖表區塊可以與之互動。</p>
-                    <div class="chart-container !max-w-[320px] !h-auto">
-                        <canvas id="daysPerCountryChart"></canvas>
-                    </div>
-                </div>
-            </section>
-
-            <section id="daily-plan" class="content-section">
+            <section id="daily-plan" class="content-section active">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl font-bold text-teal-800">每日行程詳情</h2>
                     <p class="mt-4 max-w-2xl mx-auto text-lg text-stone-600">請先選擇國家，再點擊各天數標題來展開或收合當日的詳細活動內容。</p>
@@ -224,22 +190,6 @@
                     </div>
                 </div>
                 <div id="cuisine-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                </div>
-            </section>
-
-            <section id="museums" class="content-section">
-                <div class="text-center mb-8">
-                    <h2 class="text-3xl font-bold mb-2">探索博物館與美術館</h2>
-                    <p class="text-gray-600 max-w-3xl mx-auto">波羅的海三小國與芬蘭擁有豐富的歷史和藝術寶藏。本區塊將帶您走進各國的博物館和美術館，感受其獨特的文化氛蘊。您可以透過下方的按鈕篩選特定國家的展館。</p>
-                    <div id="museums-filter-container" class="mt-6 flex justify-center space-x-2 overflow-x-auto">
-                        <button class="museums-filter-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full" data-filter="all">全部</button>
-                        <button class="museums-filter-btn bg-green-100 hover:bg-green-200 text-green-800 font-bold py-2 px-4 rounded-full" data-filter="lithuania">立陶宛</button>
-                        <button class="museums-filter-btn bg-orange-100 hover:bg-orange-200 text-orange-800 font-bold py-2 px-4 rounded-full" data-filter="latvia">拉脫維亞</button>
-                        <button class="museums-filter-btn bg-teal-100 hover:bg-teal-200 text-teal-800 font-bold py-2 px-4 rounded-full" data-filter="estonia">愛沙尼亞</button>
-                        <button class="museums-filter-btn bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold py-2 px-4 rounded-full" data-filter="finland">芬蘭</button>
-                    </div>
-                </div>
-                <div id="museums-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 </div>
             </section>
 
@@ -369,16 +319,6 @@
                 { country: 'finland', type: 'traditional', name: '肉桂捲 (Korvapuusti)', description: '芬蘭傳統甜點，味道濃郁且份量十足，是搭配咖啡的絕佳選擇。' },
                 { country: 'finland', type: 'coffee', name: 'Cafe Regatta', description: '西貝流士公園旁的海邊咖啡館，以其紅色的木屋和溫馨的氛圍聞名。' },
             ],
-            museums: [
-                { country: 'lithuania', name: '琥珀博物館 (Amber Museum)', description: '展示波羅的海地區琥珀的歷史、形成和藝術品。' },
-                { country: 'lithuania', name: '簽署之屋', description: '立陶宛獨立宣言的簽署地，內部作為歷史博物館。' },
-                { country: 'estonia', name: '愛沙尼亞藝術博物館 (Kumu Kunstimuuseum)', description: '愛沙尼亞最大的藝術博物館，展示從18世紀至今的愛沙尼亞藝術。' },
-                { country: 'estonia', name: '愛沙尼亞戶外博物館', description: '展示了愛沙尼亞鄉村生活的歷史，有各種傳統建築和農舍。' },
-                { country: 'estonia', name: 'Kiek in de Kök 防禦工事博物館', description: '塔林老城區的防禦塔，展示城市的軍事歷史。' },
-                { country: 'latvia', name: '黑人頭之屋', description: '里加舊城區的標誌性建築，曾是未婚商人行會的聚會場所，現為博物館。' },
-                { country: 'finland', name: '阿黛濃美術館 (Ateneum)', description: '芬蘭國家美術館的一部分，收藏了大量的芬蘭古典藝術品。' },
-                { country: 'finland', name: '阿莫斯雷克斯美術館 (Amos Rex)', description: '赫爾辛基的現代藝術博物館，以其獨特的建築設計聞名。' }
-            ],
             itineraryDetails: {
                 lithuania: [
                     { day: 1, title: "抵達維爾紐斯", content: "中午抵達維爾紐斯。入住後，前往老城區（Pilies 街/市政廳廣場）散步，參觀維爾紐斯大教堂與主教座堂鐘塔。晚餐推薦 Ertlio Namas 或 Amandus。", location: "維爾紐斯" },
@@ -445,13 +385,6 @@
                 "各國老城區都極具魅力，建議住在城區內，更能感受清晨與夜晚的寧靜氛圍。",
                 "旅途中若想調整節奏，四國都有不少手作市集、二手市集或博物館可作為替代方案。",
             ],
-            countryData: {
-                estonia: { name: '愛沙尼亞', capital: '塔林', size: 45339 },
-                latvia: { name: '拉脫維亞', capital: '里加', size: 64589 },
-                lithuania: { name: '立陶宛', capital: '維爾紐斯', size: 65300 },
-                finland: { name: '芬蘭', capital: '赫爾辛基', size: 338455 }
-            },
-            daysPerCountry: [3, 3, 4, 4]
         };
 
         const navButtons = document.querySelectorAll('.nav-btn');
@@ -460,14 +393,10 @@
         const attractionsFilterContainer = document.getElementById('attractions-filter-container');
         const cuisineGrid = document.getElementById('cuisine-grid');
         const cuisineFilterContainer = document.getElementById('cuisine-filter-container');
-        const museumsGrid = document.getElementById('museums-grid');
-        const museumsFilterContainer = document.getElementById('museums-filter-container');
         const modal = document.getElementById('modal');
         const modalTitle = document.getElementById('modal-title');
         const modalBody = document.getElementById('modal-body');
         const modalClose = document.getElementById('modal-close');
-        const mapContainer = document.getElementById('map-container');
-        const mapInfo = document.getElementById('map-info');
 
         const itineraryContainer = document.getElementById('itinerary-content');
         const dailyPlanCountryTabs = document.getElementById('daily-plan-country-tabs');
@@ -593,45 +522,6 @@
             }
         });
 
-        function renderMuseums(filter = 'all') {
-            museumsGrid.innerHTML = '';
-            const filteredData = mainData.museums.filter(item => filter === 'all' || item.country === filter);
-
-            filteredData.forEach(item => {
-                const card = document.createElement('div');
-                card.className = `bg-white rounded-xl shadow-md p-6 flex flex-col justify-between transition-transform hover:scale-105 country-${item.country}`;
-                card.innerHTML = `
-                    <div>
-                        <h3 class="text-xl font-bold mb-2">${item.name}</h3>
-                        <p class="text-gray-600 mb-4">${item.description.substring(0, 50)}...</p>
-                    </div>
-                    <button class="open-modal-btn mt-4 bg-gray-800 text-white font-bold py-2 px-4 rounded-full self-start hover:bg-gray-700">查看詳情</button>
-                `;
-                card.querySelector('.open-modal-btn').addEventListener('click', () => {
-                    modalTitle.textContent = item.name;
-                    modalBody.innerHTML = `<p>${item.description}</p>`;
-                    geminiSuggestBtn.style.display = 'none';
-                    modal.classList.remove('hidden');
-                    modal.classList.add('flex');
-                });
-                museumsGrid.appendChild(card);
-            });
-        }
-
-        museumsFilterContainer.addEventListener('click', (e) => {
-            if (e.target.classList.contains('museums-filter-btn')) {
-                museumsFilterContainer.querySelectorAll('.museums-filter-btn').forEach(btn => {
-                    btn.classList.remove('active-filter');
-                    btn.classList.add('inactive-filter');
-                });
-                e.target.classList.add('active-filter');
-                e.target.classList.remove('inactive-filter');
-
-                renderMuseums(e.target.dataset.filter);
-            }
-        });
-
-
         modalClose.addEventListener('click', () => {
             modal.classList.add('hidden');
             modal.classList.remove('flex');
@@ -643,14 +533,6 @@
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
                 currentModalItem = null;
-            }
-        });
-
-        mapContainer.addEventListener('click', (e) => {
-            const countryDiv = e.target.closest('.map-country');
-            if (countryDiv) {
-                const countryId = countryDiv.dataset.country;
-                mapInfo.textContent = `${mainData.countryData[countryId].name} 的首都是 ${mainData.countryData[countryId].capital}`;
             }
         });
 
@@ -697,53 +579,6 @@
             tipsList.innerHTML = mainData.travelTips.map(tip => `<li class="flex items-start"><span class="mr-2 mt-1">💡</span><span>${tip}</span></li>`).join('');
         }
         
-        function createCountrySizeChart() {
-            const ctx = document.getElementById('country-size-chart').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: [mainData.countryData.lithuania.name, mainData.countryData.latvia.name, mainData.countryData.estonia.name, mainData.countryData.finland.name],
-                    datasets: [{
-                        label: '國土面積 (km²)',
-                        data: [mainData.countryData.lithuania.size, mainData.countryData.latvia.size, mainData.countryData.estonia.size, mainData.countryData.finland.size],
-                        backgroundColor: ['rgba(34, 197, 94, 0.6)', 'rgba(249, 115, 22, 0.6)', 'rgba(20, 184, 166, 0.6)', 'rgba(59, 130, 246, 0.6)'],
-                        borderColor: ['rgb(34, 197, 94)', 'rgb(249, 115, 22)', 'rgb(20, 184, 166)', 'rgb(59, 130, 246)'],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed.y !== null) {
-                                        label += new Intl.NumberFormat('en-US').format(context.parsed.y) + ' km²';
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: { color: '#e5e7eb' }
-                        },
-                        x: {
-                            grid: { display: false }
-                        }
-                    }
-                }
-            });
-        }
-
         function createTransportTimeChart() {
             const ctx = document.getElementById('transport-time-chart').getContext('2d');
             new Chart(ctx, {
@@ -836,65 +671,6 @@
             `).join('');
         };
 
-        const createDaysPerCountryChart = () => {
-            const ctx = document.getElementById('daysPerCountryChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['🇱🇹 立陶宛', '🇱🇻 拉脫維亞', '🇪🇪 愛沙尼亞', '🇫🇮 芬蘭'],
-                    datasets: [{
-                        label: '停留天數',
-                        data: mainData.daysPerCountry,
-                        backgroundColor: [
-                            'rgba(15, 118, 110, 0.7)',
-                            'rgba(13, 148, 136, 0.7)',
-                            'rgba(20, 184, 166, 0.7)',
-                            'rgba(30, 64, 175, 0.7)'
-                        ],
-                        borderColor: [
-                            'rgba(15, 118, 110, 1)',
-                            'rgba(13, 148, 136, 1)',
-                            'rgba(20, 184, 166, 1)',
-                            'rgba(30, 64, 175, 1)'
-                        ],
-                        borderWidth: 1,
-                        hoverOffset: 8
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                font: {
-                                    family: "'Noto Sans TC', sans-serif",
-                                    size: 14
-                                },
-                                color: '#44403c'
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed !== null) {
-                                        label += context.parsed + ' 天';
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
-                    },
-                    cutout: '60%'
-                }
-            });
-        };
-
         dailyPlanCountryTabs.querySelectorAll('.country-tab').forEach(tab => {
             tab.addEventListener('click', () => {
                 dailyPlanCountryTabs.querySelectorAll('.country-tab').forEach(t => {
@@ -950,14 +726,11 @@
         document.addEventListener('DOMContentLoaded', () => {
             renderAttractions();
             renderCuisine();
-            renderMuseums();
             renderLocalTransportAccordion();
             renderIntercityTransport();
             renderAccommodationList();
             renderTipsList();
-            createCountrySizeChart();
             createTransportTimeChart();
-            createDaysPerCountryChart();
             
             renderDailyItinerary('lithuania');
             dailyPlanCountryTabs.querySelector('[data-country="lithuania"]').classList.add('active-tab');
