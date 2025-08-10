@@ -195,26 +195,7 @@
             <section id="attractions" class="content-section">
                 <div class="text-center mb-8">
                     <h2 class="text-3xl font-bold mb-2">探索熱門景點</h2>
-                    <p class="text-gray-600 max-w-3xl mx-auto">此處匯集了四國最不容錯過的景點。您可以點擊下方的地圖標記來查看景點詳情，或透過按鈕篩選特定國家的景點卡片。</p>
-                </div>
-
-                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <div class="bg-white p-4 rounded-xl shadow-md">
-                        <h3 class="text-xl font-bold text-center mb-4">立陶宛景點</h3>
-                        <div id="lithuania-attraction-map-container" class="attraction-country-map-container bg-green-50"></div>
-                    </div>
-                    <div class="bg-white p-4 rounded-xl shadow-md">
-                        <h3 class="text-xl font-bold text-center mb-4">拉脫維亞景點</h3>
-                        <div id="latvia-attraction-map-container" class="attraction-country-map-container bg-orange-50"></div>
-                    </div>
-                    <div class="bg-white p-4 rounded-xl shadow-md">
-                        <h3 class="text-xl font-bold text-center mb-4">愛沙尼亞景點</h3>
-                        <div id="estonia-attraction-map-container" class="attraction-country-map-container bg-teal-50"></div>
-                    </div>
-                    <div class="bg-white p-4 rounded-xl shadow-md">
-                        <h3 class="text-xl font-bold text-center mb-4">芬蘭景點</h3>
-                        <div id="finland-attraction-map-container" class="attraction-country-map-container bg-blue-50"></div>
-                    </div>
+                    <p class="text-gray-600 max-w-3xl mx-auto">此處匯集了四國最不容錯過的景點。您可以透過下方的按鈕篩選特定國家的景點卡片。</p>
                 </div>
 
                 <div id="attractions-filter-container" class="mt-6 flex justify-center space-x-2 overflow-x-auto mb-8">
@@ -323,39 +304,39 @@
     <script>
         const mainData = {
             attractions: [
-                { country: 'lithuania', title: '維爾紐斯老城', content: '歐洲最大的舊城區之一，也是世界文化遺產。', mapPos: { top: '60%', left: '70%' } },
-                { country: 'lithuania', title: '維爾紐斯大教堂', content: '立陶宛最重要的羅馬天主教大教堂之一，建築宏偉莊嚴。', mapPos: { top: '65%', left: '75%' } },
-                { country: 'lithuania', title: '維爾紐斯大學院落', content: '歷史悠久的大學，由多個美麗的院落組成。', mapPos: { top: '62%', left: '72%' } },
-                { country: 'lithuania', title: '文學街', content: '充滿藝術氣息的小巷，牆上裝飾著紀念文人作家的作品。', mapPos: { top: '64%', left: '70%' } },
-                { country: 'lithuania', title: '格迪米納斯塔樓', content: '維爾紐斯的地標，曾是上城堡的一部分，現為博物館，可俯瞰城市全景。', mapPos: { top: '58%', left: '78%' } },
-                { country: 'lithuania', title: '簽署之屋', content: '立陶宛獨立宣言簽署的地方，現為博物館。', mapPos: { top: '61%', left: '73%' } },
-                { country: 'lithuania', title: '特拉凱水上城堡', content: '位於湖中的童話般城堡，是立陶宛的標誌性景點。', mapPos: { top: '70%', left: '60%' } },
+                { country: 'lithuania', title: '維爾紐斯老城', content: '歐洲最大的舊城區之一，也是世界文化遺產。' },
+                { country: 'lithuania', title: '維爾紐斯大教堂', content: '立陶宛最重要的羅馬天主教大教堂之一，建築宏偉莊嚴。' },
+                { country: 'lithuania', title: '維爾紐斯大學院落', content: '歷史悠久的大學，由多個美麗的院落組成。' },
+                { country: 'lithuania', title: '文學街', content: '充滿藝術氣息的小巷，牆上裝飾著紀念文人作家的作品。' },
+                { country: 'lithuania', title: '格迪米納斯塔樓', content: '維爾紐斯的地標，曾是上城堡的一部分，現為博物館，可俯瞰城市全景。' },
+                { country: 'lithuania', title: '簽署之屋', content: '立陶宛獨立宣言簽署的地方，現為博物館。' },
+                { country: 'lithuania', title: '特拉凱水上城堡', content: '位於湖中的童話般城堡，是立陶宛的標誌性景點。' },
 
-                { country: 'latvia', title: '里加舊城區', content: '世界文化遺產，以其豐富的新藝術建築風格而聞名。必訪景點包括聖彼得教堂、黑頭宮。', mapPos: { top: '40%', left: '50%' } },
-                { country: 'latvia', title: '自由紀念碑', content: '紀念拉脫維亞獨立戰爭中犧牲的士兵，是里加重要的地標。', mapPos: { top: '45%', left: '55%' } },
-                { country: 'latvia', title: '中央市場', content: '由齊柏林飛艇機庫改建而成，是歐洲最大的市場之一。', mapPos: { top: '50%', left: '50%' } },
-                { country: 'latvia', title: '新藝術建築群 (Alberta iela)', content: '里加擁有世界上最集中的新藝術建築群，漫步其中感受獨特風格。', mapPos: { top: '35%', left: '48%' } },
-                { country: 'latvia', title: '里加城堡', content: '現為拉脫維亞總統的官邸和拉脫維亞國家歷史博物館所在地。', mapPos: { top: '38%', left: '45%' } },
-                { country: 'latvia', title: '里加貓之屋', content: '以屋頂上的貓雕像聞名，背後有一段有趣的傳說。', mapPos: { top: '42%', left: '48%' } },
+                { country: 'latvia', title: '里加舊城區', content: '世界文化遺產，以其豐富的新藝術建築風格而聞名。必訪景點包括聖彼得教堂、黑頭宮。' },
+                { country: 'latvia', title: '自由紀念碑', content: '紀念拉脫維亞獨立戰爭中犧牲的士兵，是里加重要的地標。' },
+                { country: 'latvia', title: '中央市場', content: '由齊柏林飛艇機庫改建而成，是歐洲最大的市場之一。' },
+                { country: 'latvia', title: '新藝術建築群 (Alberta iela)', content: '里加擁有世界上最集中的新藝術建築群，漫步其中感受獨特風格。' },
+                { country: 'latvia', title: '里加城堡', content: '現為拉脫維亞總統的官邸和拉脫維亞國家歷史博物館所在地。' },
+                { country: 'latvia', title: '里加貓之屋', content: '以屋頂上的貓雕像聞名，背後有一段有趣的傳說。' },
 
-                { country: 'estonia', title: '塔林老城區', content: '被聯合國教科文組織列為世界文化遺產，保存完好的中世紀古城。', mapPos: { top: '20%', left: '70%' } },
-                { country: 'estonia', title: '維魯門', content: '塔林老城區的主要入口之一，兩側的圓形塔樓是其標誌。', mapPos: { top: '22%', left: '72%' } },
-                { country: 'estonia', title: '市政廳廣場', content: '老城的中心，周圍有中世紀建築和歐洲最古老的藥局。', mapPos: { top: '24%', left: '70%' } },
-                { country: 'estonia', title: '大基爾特之屋', content: '中世紀商人行會的總部，現為愛沙尼亞歷史博物館的一部分。', mapPos: { top: '23%', left: '68%' } },
-                { country: 'estonia', title: '聖尼古拉教堂 (Kiek in de Kök)', content: '曾是防禦塔，現為博物館，可了解塔林歷史。', mapPos: { top: '26%', left: '65%' } },
-                { country: 'estonia', title: '上城（Toompea）', content: '位於山丘上的老城區，有多個觀景台，可俯瞰塔林全景。', mapPos: { top: '18%', left: '65%' } },
-                { country: 'estonia', title: '亞歷山大涅夫斯基主教座堂', content: '上城中宏偉的東正教大教堂，建於沙皇時代。', mapPos: { top: '16%', left: '68%' } },
-                { country: 'estonia', title: '塔林聖母主教座堂', content: '塔林最古老的教堂，以其收藏的貴族徽章聞名。', mapPos: { top: '17%', left: '66%' } },
-                { country: 'estonia', title: 'Telliskivi Creative City', content: '塔林新興的創意街區，充滿設計商店、咖啡館和街頭藝術。', mapPos: { top: '30%', left: '60%' } },
-                { country: 'estonia', title: '愛沙尼亞戶外博物館', content: '展示愛沙尼亞鄉村生活歷史，有各種傳統建築和農舍。', mapPos: { top: '40%', left: '80%' } },
-                { country: 'estonia', title: 'Lahemaa 國家公園', content: '擁有森林、沼澤、海岸線和莊園的自然公園。', mapPos: { top: '10%', left: '80%' } },
-                { country: 'finland', title: '參議院廣場與赫爾辛基主教座堂', content: '赫爾辛基的中心地帶，新古典主義建築群宏偉壯觀。', mapPos: { top: '50%', left: '50%' } },
-                { country: 'finland', title: '老市場廣場', content: '赫爾辛基港口的露天市場，有許多小吃攤和紀念品店。', mapPos: { top: '55%', left: '55%' } },
-                { country: 'finland', title: '烏斯佩斯基大教堂', content: '西歐最大的東正教堂，紅磚外觀十分顯眼。', mapPos: { top: '52%', left: '58%' } },
-                { country: 'finland', title: '岩石教堂', content: '直接在花崗岩中鑿建而成的獨特教堂，自然採光極佳。', mapPos: { top: '45%', left: '40%' } },
-                { country: 'finland', title: '西貝流士紀念碑', content: '紀念芬蘭最著名的作曲家西貝流士，由數百根鋼管組成。', mapPos: { top: '40%', left: '30%' } },
-                { country: 'finland', title: '芬蘭堡', content: '被列為世界遺產的海上要塞，由數座島嶼組成，可搭乘渡輪前往。', mapPos: { top: '60%', left: '65%' } },
-                { country: 'finland', title: '波爾沃 (Porvoo)', content: '芬蘭第二古老的城市，以其老城區的紅色木屋聞名。', mapPos: { top: '70%', left: '80%' } }
+                { country: 'estonia', title: '塔林老城區', content: '被聯合國教科文組織列為世界文化遺產，保存完好的中世紀古城。' },
+                { country: 'estonia', title: '維魯門', content: '塔林老城區的主要入口之一，兩側的圓形塔樓是其標誌。' },
+                { country: 'estonia', title: '市政廳廣場', content: '老城的中心，周圍有中世紀建築和歐洲最古老的藥局。' },
+                { country: 'estonia', title: '大基爾特之屋', content: '中世紀商人行會的總部，現為愛沙尼亞歷史博物館的一部分。' },
+                { country: 'estonia', title: '聖尼古拉教堂 (Kiek in de Kök)', content: '曾是防禦塔，現為博物館，可了解塔林歷史。' },
+                { country: 'estonia', title: '上城（Toompea）', content: '位於山丘上的老城區，有多個觀景台，可俯瞰塔林全景。' },
+                { country: 'estonia', title: '亞歷山大涅夫斯基主教座堂', content: '上城中宏偉的東正教大教堂，建於沙皇時代。' },
+                { country: 'estonia', title: '塔林聖母主教座堂', content: '塔林最古老的教堂，以其收藏的貴族徽章聞名。' },
+                { country: 'estonia', title: 'Telliskivi Creative City', content: '塔林新興的創意街區，充滿設計商店、咖啡館和街頭藝術。' },
+                { country: 'estonia', title: '愛沙尼亞戶外博物館', content: '展示愛沙尼亞鄉村生活歷史，有各種傳統建築和農舍。' },
+                { country: 'estonia', title: 'Lahemaa 國家公園', content: '擁有森林、沼澤、海岸線和莊園的自然公園。' },
+                { country: 'finland', title: '參議院廣場與赫爾辛基主教座堂', content: '赫爾辛基的中心地帶，新古典主義建築群宏偉壯觀。' },
+                { country: 'finland', title: '老市場廣場', content: '赫爾辛基港口的露天市場，有許多小吃攤和紀念品店。' },
+                { country: 'finland', title: '烏斯佩斯基大教堂', content: '西歐最大的東正教堂，紅磚外觀十分顯眼。' },
+                { country: 'finland', title: '岩石教堂', content: '直接在花崗岩中鑿建而成的獨特教堂，自然採光極佳。' },
+                { country: 'finland', title: '西貝流士紀念碑', content: '紀念芬蘭最著名的作曲家西貝流士，由數百根鋼管組成。' },
+                { country: 'finland', title: '芬蘭堡', content: '被列為世界遺產的海上要塞，由數座島嶼組成，可搭乘渡輪前往。' },
+                { country: 'finland', title: '波爾沃 (Porvoo)', content: '芬蘭第二古老的城市，以其老城區的紅色木屋聞名。' }
             ],
             cuisine: [
                 { country: 'lithuania', type: 'restaurant', name: 'Ertlio Namas', description: '提供帶有歷史感的傳統立陶宛菜，用餐環境典雅。' },
@@ -487,10 +468,6 @@
         const modalClose = document.getElementById('modal-close');
         const mapContainer = document.getElementById('map-container');
         const mapInfo = document.getElementById('map-info');
-        const estoniaAttractionMapContainer = document.getElementById('estonia-attraction-map-container');
-        const latviaAttractionMapContainer = document.getElementById('latvia-attraction-map-container');
-        const lithuaniaAttractionMapContainer = document.getElementById('lithuania-attraction-map-container');
-        const finlandAttractionMapContainer = document.getElementById('finland-attraction-map-container');
 
         const itineraryContainer = document.getElementById('itinerary-content');
         const dailyPlanCountryTabs = document.getElementById('daily-plan-country-tabs');
@@ -801,43 +778,6 @@
             });
         }
 
-        function renderAttractionMap() {
-            estoniaAttractionMapContainer.innerHTML = '';
-            latviaAttractionMapContainer.innerHTML = '';
-            lithuaniaAttractionMapContainer.innerHTML = '';
-            finlandAttractionMapContainer.innerHTML = '';
-
-            mainData.attractions.forEach((attraction) => {
-                const marker = document.createElement('div');
-                marker.className = 'map-marker';
-                marker.style.top = attraction.mapPos.top;
-                marker.style.left = attraction.mapPos.left;
-                marker.title = attraction.title;
-
-                marker.addEventListener('click', () => {
-                    modalTitle.textContent = attraction.title;
-                    modalBody.innerHTML = `<p>${attraction.content}</p>`;
-                    geminiSuggestBtn.style.display = 'none';
-                    modal.classList.remove('hidden');
-                    modal.classList.add('flex');
-                });
-
-                let targetContainer;
-                if (attraction.country === 'estonia') {
-                    targetContainer = estoniaAttractionMapContainer;
-                } else if (attraction.country === 'latvia') {
-                    targetContainer = latviaAttractionMapContainer;
-                } else if (attraction.country === 'lithuania') {
-                    targetContainer = lithuaniaAttractionMapContainer;
-                } else if (attraction.country === 'finland') {
-                    targetContainer = finlandAttractionMapContainer;
-                }
-                if (targetContainer) {
-                    targetContainer.appendChild(marker);
-                }
-            });
-        }
-
         const renderDailyItinerary = (country) => {
             const data = mainData.itineraryDetails[country] || [];
             itineraryContainer.innerHTML = data.map(item => `
@@ -1017,7 +957,6 @@
             renderTipsList();
             createCountrySizeChart();
             createTransportTimeChart();
-            renderAttractionMap();
             createDaysPerCountryChart();
             
             renderDailyItinerary('lithuania');
