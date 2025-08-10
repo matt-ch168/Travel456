@@ -1,73 +1,254 @@
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>波羅的海三國＋赫爾辛基 12 天行程</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>波羅的海14天行程總覽</title>
 <style>
-  body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-  header { background-color: #2c3e50; color: white; padding: 1em; text-align: center; }
-  .day { border-bottom: 1px solid #ccc; padding: 1em; }
-  h2 { color: #34495e; }
-  ul { list-style: none; padding: 0; }
-  li { margin: 0.5em 0; }
-  a { color: #2980b9; text-decoration: none; }
+  body {
+    margin: 0; font-family: "Microsoft JhengHei", sans-serif;
+    display: flex; height: 100vh;
+    background: #fafafa;
+    color: #333;
+  }
+  nav {
+    width: 280px;
+    background: #2c3e50;
+    color: white;
+    overflow-y: auto;
+  }
+  nav h2 {
+    text-align: center;
+    padding: 1rem 0;
+    margin: 0;
+    border-bottom: 1px solid #34495e;
+    font-weight: 600;
+    font-size: 1.4rem;
+  }
+  nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  nav li {
+    border-bottom: 1px solid #34495e;
+  }
+  nav button {
+    width: 100%;
+    background: none;
+    border: none;
+    color: white;
+    padding: 14px 20px;
+    font-size: 1rem;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
+    transition: background 0.3s;
+  }
+  nav button:hover,
+  nav button.active {
+    background: #34495e;
+  }
+  main {
+    flex-grow: 1;
+    padding: 30px 40px;
+    overflow-y: auto;
+  }
+  main h1 {
+    margin-top: 0;
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 12px;
+  }
+  main .section-title {
+    font-weight: 600;
+    margin-top: 24px;
+    margin-bottom: 6px;
+    font-size: 1.1rem;
+    color: #2980b9;
+  }
+  main p {
+    line-height: 1.5;
+    margin: 8px 0;
+    white-space: pre-line;
+  }
+  main hr {
+    margin: 30px 0;
+    border-color: #ddd;
+  }
 </style>
 </head>
 <body>
-<header>
-  <h1>波羅的海三國＋赫爾辛基 12 天行程</h1>
-</header>
-<div class="day">
-  <h2>Day 1 (維爾紐斯)</h2>
-  <ul>
-    <li>黎明之門</li>
-    <li>聖泰瑞莎教堂</li>
-    <li>聖三一教堂</li>
-    <li>立陶宛國家愛樂協會</li>
-    <li>維爾紐斯市政廳</li>
+<nav>
+  <h2>行程總覽（14 天）</h2>
+  <ul id="day-list">
+    <!-- JS 生成 -->
   </ul>
-</div>
-<div class="day">
-  <h2>Day 2 (維爾紐斯)</h2>
-  <ul>
-    <li>皮利斯街</li>
-    <li>簽署之屋</li>
-    <li>文學街</li>
-    <li>琥珀博物館</li>
-    <li>立陶宛總統府</li>
-    <li>維爾紐斯大學</li>
-  </ul>
-</div>
-<div class="day">
-  <h2>Day 3 (維爾紐斯 + 特拉凱一日遊)</h2>
-  <ul>
-    <li>維爾紐斯主教座堂</li>
-    <li>主教座堂鐘塔</li>
-    <li>奇蹟地磚</li>
-    <li>格迪米納斯塔</li>
-    <li>聖安妮教堂</li>
-    <li>聖母主教座堂</li>
-    <li>對岸共和國藝術區</li>
-    <li>特拉凱城堡</li>
-    <li>特拉凱湖</li>
-    <li>特拉凱歷史博物館</li>
-  </ul>
-</div>
-<div class="day">
-  <h2>Day 4 (里加)</h2>
-  <ul>
-    <li>自由紀念碑</li>
-    <li>萊瑪時鐘</li>
-    <li>拉脫維亞國家歌劇院</li>
-    <li>聖彼得教堂</li>
-    <li>市政廳廣場</li>
-    <li>黑頭宮</li>
-    <li>羅蘭雕像</li>
-    <li>槍手廣場</li>
-  </ul>
-</div>
-<!-- 省略，實際應包含 Day 5~12 的全部景點 -->
+</nav>
+<main>
+  <h1 id="day-title">請點選左側行程以查看詳情</h1>
+  <div id="day-content"></div>
+</main>
+
+<script>
+  const itinerary = [
+    {
+      day: 1,
+      title: "Day 1：抵達 — 維爾紐斯（中午抵達）",
+      content: `下午：入住、在老城（Pilies / Pilies街 / 市政廳廣場）散步、看維爾紐斯大教堂、主教座堂鐘塔。
+
+晚上：晚餐推薦 Ertlio Namas（傳統立陶宛菜、帶歷史感的呈現）或 Amandus（創新料理，當地名店）。`
+    },
+    {
+      day: 2,
+      title: "Day 2：維爾紐斯深度（老城 + 大學區 + 市場）",
+      content: `上午：維爾紐斯大學院落、文學街、琥珀博物館。
+
+下午：格迪米納斯塔（Gediminas Tower）+ 城市觀景。漫步簽署之屋、皮利斯街。
+
+晚上：試試當地小酒館或 Džiaugsmas / Gastronomika（高評價當代餐廳）。`
+    },
+    {
+      day: 3,
+      title: "Day 3：特拉凱 (Trakai) 一日遊",
+      content: `全天：從維爾紐斯出發約 30–45 分鐘車程到特拉凱湖中城堡，可搭船/步行拍照、吃當地特色的琥珀或烤魚與“基爾德”克里米亞塔塔（Kybyns）小吃。傍晚回維爾紐斯。
+
+晚上：老城內悠閒晚餐或小酒吧。`
+    },
+    {
+      day: 4,
+      title: "Day 4：維爾紐斯 → 里加（陸路）",
+      content: `早上搭長途巴士/火車前往里加（車程約 4–5 小時，視路線與停靠而定，Lux Express / Ecolines / 匯流巴士常見）。建議早班出發可在下午抵達里加。
+
+下午：抵達後先在自由紀念碑、中央市場周邊散步、逛舊城外圍。
+
+晚上：晚餐推薦 Rozengrals（中世風餐廳）或 Folkklubs Ala Pagrabs（地道拉脫維亞菜與酒館氛圍）。`
+    },
+    {
+      day: 5,
+      title: "Day 5：里加舊城深度走讀",
+      content: `上午：聖彼得教堂登塔、市政廳廣場、黑頭宮、羅蘭雕像、槍手廣場拍照。
+
+下午：走訪新藝術建築群（Alberta iela / Art Nouveau）、里加城堡 / 里加主教座堂。可加去里加火藥塔與里加貓之屋拍照留念。
+
+晚上：嘗試 Vincents（高端現代料理）或老城小館。`
+    },
+    {
+      day: 6,
+      title: "Day 6：里加周邊 / 市場與文化",
+      content: `上午：里加中央市場（當地食品、冷熏魚、黑麥麵包）→ 午餐在市場或附近小館。
+
+下午：可選行程：去古鎮 Kuldīga（半日—需安排交通）或在里加博物館/歌劇院看場演出。
+
+晚上：里加舊城酒吧或主題餐廳。`
+    },
+    {
+      day: 7,
+      title: "Day 7：里加 → 塔林（北上）",
+      content: `早上出發：搭乘火車或巴士前往塔林（車程約 4 小時左右，視班次），或選飛行（短程但不一定省時）。
+
+下午：抵達塔林後入住、先在下城區（Old Town）散步：維魯門（Viru Gate）、市政廳廣場、大基爾特之屋 / 黑頭宮（Blackheads）、聖奧拉夫教堂、三姊妹、市政廳藥局、聖尼古拉教堂（Kiek in de Kök / 博物館）等。
+
+晚上：晚餐推薦 Rataskaevu 16（老城名店）或當地米其林推薦餐廳列表。`
+    },
+    {
+      day: 8,
+      title: "Day 8：塔林上城（Toompea）與觀景台",
+      content: `上午：上城（Toompea）看自由廣場、聖約翰教堂、座堂山城堡（Toompea Castle）。前往 Patkuli / Kohtuotsa / Kohtuotsa 觀景台、帕特苦莉（Patkuli）。
+
+下午：參觀亞歷山大涅夫斯基主教座堂、塔林聖母主教座堂，若感興趣進防禦工事博物館（Kiek in de Kök / 城牆博物館）。
+
+晚上：在舊城享用晚餐，或到 Telliskivi Creative City（卡拉馬亞 / 創意園區）晚逛、喝調酒。`
+    },
+    {
+      day: 9,
+      title: "Day 9：塔林：創意區 + 戶外博物館 + 輕鬆漫遊",
+      content: `上午：Telliskivi Creative City（設計小店、咖啡館、街頭藝術）。
+
+下午：愛沙尼亞戶外博物館（Estonian Open Air Museum）（民俗建築、風情展示）或到 Kumu（愛沙尼亞藝術博物館）。
+
+晚上：可選海邊餐廳（如 NOA/海景餐廳）或老城小館。`
+    },
+    {
+      day: 10,
+      title: "Day 10：塔林可選延伸（Lahemaa 國家公園或帕爾努）",
+      content: `選 A（自然與莊園）：Lahemaa National Park 一日遊（古莊園、森林與海岸，距塔林約 1 小時車程） — 適合想看愛沙尼亞鄉野風情的旅客。
+
+選 B（海濱小鎮）：帕爾努（Pärnu）海灘、悠閒小鎮（夏季特別適合）。
+
+晚上：回塔林或在當地過夜，享用當地餐廳。`
+    },
+    {
+      day: 11,
+      title: "Day 11：塔林 → 赫爾辛基（坐渡輪）",
+      content: `早上：搭塔林→赫爾辛基渡輪（航程約 2–2.5 小時，多家班次：Tallink, Viking, Eckerö 等，頻繁每日多班）。建議早點搭船，抵達後直接開始市區觀光。
+
+下午：抵達赫爾辛基後參觀參議院廣場 / 主教座堂 / 阿黛濃美術館（Ateneum / Amos Rex 的選擇）、老市場廣場（Market Square）。
+
+晚上：晚餐推薦 Savoy（經典高檔）或 Old Market Hall 內的小吃攤享受當地海鮮與三文魚湯。`
+    },
+    {
+      day: 12,
+      title: "Day 12：赫爾辛基深度（設計區 + 岩石教堂）",
+      content: `上午：逛設計區（Design District）、烏斯佩斯基大教堂。
+
+下午：岩石教堂（Temppeliaukio Church）、西貝流士紀念碑、埃斯普拉納迪公園。傍晚前往芬蘭堡（Suomenlinna）（可選半日 / 傍晚漫遊）。
+
+晚上：試試當地新式料理或海港邊餐廳；若想體驗芬蘭桑拿與海港餐廳，可考慮 Löyly / Allas Sea Pool 等（需預約）。`
+    },
+    {
+      day: 13,
+      title: "Day 13：赫爾辛基自由日或一日短途（Porvoo 可選）",
+      content: `選 A：赫爾辛基自由行，購物、設計館、咖啡廳巡禮。
+
+選 B（經典）：Porvoo（波爾沃）半日：被譽為芬蘭最美小鎮之一，距赫爾辛基約 1 小時車程，適合拍照與品嚐甜點。
+
+晚上：最後一晚的精緻晚餐（若喜歡海鮮或北歐新料理可再挑一家評價高的餐廳訂位）。`
+    },
+    {
+      day: 14,
+      title: "Day 14：赫爾辛基（上午／下午）→ 離境（傍晚出發）",
+      content: `上午：若航班較晚，可在市區慢行、買伴手禮或到舊市場吃最後的鮭魚湯/麵包。
+
+下午：回飯店取行李、前往機場，傍晚／晚間離境。`
+    }
+  ];
+
+  const dayListEl = document.getElementById("day-list");
+  const dayTitleEl = document.getElementById("day-title");
+  const dayContentEl = document.getElementById("day-content");
+
+  // 建立側邊欄按鈕
+  itinerary.forEach(({ day, title }) => {
+    const li = document.createElement("li");
+    const btn = document.createElement("button");
+    btn.textContent = `${title}`;
+    btn.addEventListener("click", () => {
+      showDay(day);
+      setActiveButton(btn);
+    });
+    li.appendChild(btn);
+    dayListEl.appendChild(li);
+  });
+
+  function showDay(day) {
+    const dayData = itinerary.find(d => d.day === day);
+    if (!dayData) return;
+    dayTitleEl.textContent = dayData.title;
+    // 將換行字串用<p>包起來
+    const paragraphs = dayData.content.split('\n').filter(p => p.trim() !== '');
+    dayContentEl.innerHTML = paragraphs.map(p => `<p>${p.trim()}</p>`).join('');
+  }
+
+  function setActiveButton(activeBtn) {
+    const buttons = dayListEl.querySelectorAll("button");
+    buttons.forEach(btn => {
+      btn.classList.toggle("active", btn === activeBtn);
+    });
+  }
+
+  // 預設顯示第一天
+  dayListEl.querySelector("button").click();
+</script>
 </body>
 </html>
