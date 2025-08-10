@@ -1,254 +1,1029 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>波羅的海14天行程總覽</title>
-<style>
-  body {
-    margin: 0; font-family: "Microsoft JhengHei", sans-serif;
-    display: flex; height: 100vh;
-    background: #fafafa;
-    color: #333;
-  }
-  nav {
-    width: 280px;
-    background: #2c3e50;
-    color: white;
-    overflow-y: auto;
-  }
-  nav h2 {
-    text-align: center;
-    padding: 1rem 0;
-    margin: 0;
-    border-bottom: 1px solid #34495e;
-    font-weight: 600;
-    font-size: 1.4rem;
-  }
-  nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  nav li {
-    border-bottom: 1px solid #34495e;
-  }
-  nav button {
-    width: 100%;
-    background: none;
-    border: none;
-    color: white;
-    padding: 14px 20px;
-    font-size: 1rem;
-    text-align: left;
-    cursor: pointer;
-    outline: none;
-    transition: background 0.3s;
-  }
-  nav button:hover,
-  nav button.active {
-    background: #34495e;
-  }
-  main {
-    flex-grow: 1;
-    padding: 30px 40px;
-    overflow-y: auto;
-  }
-  main h1 {
-    margin-top: 0;
-    font-size: 2rem;
-    color: #2c3e50;
-    margin-bottom: 12px;
-  }
-  main .section-title {
-    font-weight: 600;
-    margin-top: 24px;
-    margin-bottom: 6px;
-    font-size: 1.1rem;
-    color: #2980b9;
-  }
-  main p {
-    line-height: 1.5;
-    margin: 8px 0;
-    white-space: pre-line;
-  }
-  main hr {
-    margin: 30px 0;
-    border-color: #ddd;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>波羅的海三小國與芬蘭互動探索指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #FDFBF8;
+            color: #44403c;
+        }
+        .nav-btn {
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+        }
+        .nav-btn.active {
+            border-bottom-color: #C0A080;
+            color: #333;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .modal-backdrop {
+            background-color: rgba(0,0,0,0.6);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .attraction-country-map-container {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            background-color: #E0F2F7;
+            border-radius: 1rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+        }
+        .map-marker {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #EF4444;
+            border: 2px solid white;
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+            transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+            z-index: 10;
+        }
+        .map-marker:hover {
+            transform: translate(-50%, -50%) scale(1.5);
+            background-color: #DC2626;
+        }
+        .active-tab {
+            background-color: #0d9488;
+            color: #ffffff;
+            border-color: #0d9488;
+        }
+        .inactive-tab {
+            background-color: #ffffff;
+            color: #3f3f46;
+            border-color: #d4d4d8;
+        }
+        .active-filter {
+            background-color: #14b8a6;
+            color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .inactive-filter {
+            background-color: #f4f4f5;
+            color: #52525b;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .accordion-content.open {
+            max-height: 1000px;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+        }
+        .nav-link:hover {
+            color: #0d9488;
+            border-bottom-color: #0d9488;
+        }
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #333;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
-<body>
-<nav>
-  <h2>行程總覽（14 天）</h2>
-  <ul id="day-list">
-    <!-- JS 生成 -->
-  </ul>
-</nav>
-<main>
-  <h1 id="day-title">請點選左側行程以查看詳情</h1>
-  <div id="day-content"></div>
-</main>
+<body class="text-gray-800">
 
-<script>
-  const itinerary = [
-    {
-      day: 1,
-      title: "Day 1：抵達 — 維爾紐斯（中午抵達）",
-      content: `下午：入住、在老城（Pilies / Pilies街 / 市政廳廣場）散步、看維爾紐斯大教堂、主教座堂鐘塔。
+    <div id="app" class="container mx-auto p-4 md:p-8 max-w-7xl">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-2">波羅的海三小國與芬蘭</h1>
+            <p class="text-xl text-gray-600">互動探索指南</p>
+        </header>
 
-晚上：晚餐推薦 Ertlio Namas（傳統立陶宛菜、帶歷史感的呈現）或 Amandus（創新料理，當地名店）。`
-    },
-    {
-      day: 2,
-      title: "Day 2：維爾紐斯深度（老城 + 大學區 + 市場）",
-      content: `上午：維爾紐斯大學院落、文學街、琥珀博物館。
+        <nav class="flex justify-center border-b border-gray-200 mb-8 overflow-x-auto pb-2">
+            <button data-target="overview" class="nav-btn p-4 text-lg font-medium text-gray-500 active">總覽</button>
+            <button data-target="daily-plan" class="nav-btn p-4 text-lg font-medium text-gray-500">每日行程</button>
+            <button data-target="attractions" class="nav-btn p-4 text-lg font-medium text-gray-500">探索景點</button>
+            <button data-target="cuisine" class="nav-btn p-4 text-lg font-medium text-gray-500">美食</button>
+            <button data-target="museums" class="nav-btn p-4 text-lg font-medium text-gray-500">博物館與美術館</button>
+            <button data-target="transport" class="nav-btn p-4 text-lg font-medium text-gray-500">交通攻略</button>
+            <button data-target="info" class="nav-btn p-4 text-lg font-medium text-gray-500">住宿與提示</button>
+        </nav>
 
-下午：格迪米納斯塔（Gediminas Tower）+ 城市觀景。漫步簽署之屋、皮利斯街。
+        <main>
+            <section id="overview" class="content-section active">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold mb-2">概覽與比較</h2>
+                    <p class="text-gray-600 max-w-3xl mx-auto">歡迎來到波羅的海與芬蘭互動指南！本區塊提供四國的地理位置與基本數據比較，讓您對這片迷人的土地有初步的認識。您可以點擊下方的地圖區塊來查看各國首都。</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold text-center mb-4">四國地理位置</h3>
+                        <div id="map-container" class="relative w-full aspect-square max-w-md mx-auto flex flex-col items-center justify-center space-y-2">
+                            <div data-country="finland" class="map-country w-44 h-28 bg-blue-200 rounded-lg flex items-center justify-center text-blue-800 font-bold text-lg cursor-pointer transition-transform hover:scale-105">芬蘭</div>
+                            <div data-country="estonia" class="map-country w-40 h-24 bg-teal-200 rounded-lg flex items-center justify-center text-teal-800 font-bold text-lg cursor-pointer transition-transform hover:scale-105">愛沙尼亞</div>
+                            <div data-country="latvia" class="map-country w-44 h-28 bg-orange-200 rounded-lg flex items-center justify-center text-orange-800 font-bold text-lg cursor-pointer transition-transform hover:scale-105">拉脫維亞</div>
+                            <div data-country="lithuania" class="map-country w-48 h-32 bg-green-200 rounded-lg flex items-center justify-center text-green-800 font-bold text-lg cursor-pointer transition-transform hover:scale-105">立陶宛</div>
+                        </div>
+                        <p id="map-info" class="text-center mt-4 text-gray-700 font-semibold h-6">點擊國家以查看首都</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold text-center mb-4">國土面積比較 (平方公里)</h3>
+                        <div class="chart-container">
+                            <canvas id="country-size-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6 max-w-4xl mx-auto mt-8">
+                    <h3 class="text-xl font-semibold text-stone-700 mb-4 text-center">旅程時間分配</h3>
+                    <p class="text-stone-500 mb-6 text-center">這趟旅程將均衡地分配在四個國家，讓您有充足的時間感受每個地方的獨特魅力。點擊圖表區塊可以與之互動。</p>
+                    <div class="chart-container !max-w-[320px] !h-auto">
+                        <canvas id="daysPerCountryChart"></canvas>
+                    </div>
+                </div>
+            </section>
 
-晚上：試試當地小酒館或 Džiaugsmas / Gastronomika（高評價當代餐廳）。`
-    },
-    {
-      day: 3,
-      title: "Day 3：特拉凱 (Trakai) 一日遊",
-      content: `全天：從維爾紐斯出發約 30–45 分鐘車程到特拉凱湖中城堡，可搭船/步行拍照、吃當地特色的琥珀或烤魚與“基爾德”克里米亞塔塔（Kybyns）小吃。傍晚回維爾紐斯。
+            <section id="daily-plan" class="content-section">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-teal-800">每日行程詳情</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-lg text-stone-600">請先選擇國家，再點擊各天數標題來展開或收合當日的詳細活動內容。</p>
+                </div>
+                
+                <div class="flex justify-center space-x-2 md:space-x-4 mb-8 overflow-x-auto" id="daily-plan-country-tabs">
+                    <button data-country="lithuania" class="country-tab active-tab text-sm md:text-base font-semibold py-2 px-4 rounded-full border-2 transition-all duration-300">🇱🇹 立陶宛</button>
+                    <button data-country="latvia" class="country-tab inactive-tab text-sm md:text-base font-semibold py-2 px-4 rounded-full border-2 transition-all duration-300">🇱🇻 拉脫維亞</button>
+                    <button data-country="estonia" class="country-tab inactive-tab text-sm md:text-base font-semibold py-2 px-4 rounded-full border-2 transition-all duration-300">🇪🇪 愛沙尼亞</button>
+                    <button data-country="finland" class="country-tab inactive-tab text-sm md:text-base font-semibold py-2 px-4 rounded-full border-2 transition-all duration-300">🇫🇮 芬蘭</button>
+                </div>
 
-晚上：老城內悠閒晚餐或小酒吧。`
-    },
-    {
-      day: 4,
-      title: "Day 4：維爾紐斯 → 里加（陸路）",
-      content: `早上搭長途巴士/火車前往里加（車程約 4–5 小時，視路線與停靠而定，Lux Express / Ecolines / 匯流巴士常見）。建議早班出發可在下午抵達里加。
+                <div id="itinerary-content" class="max-w-4xl mx-auto">
+                </div>
+            </section>
 
-下午：抵達後先在自由紀念碑、中央市場周邊散步、逛舊城外圍。
+            <section id="attractions" class="content-section">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold mb-2">探索熱門景點</h2>
+                    <p class="text-gray-600 max-w-3xl mx-auto">此處匯集了四國最不容錯過的景點。您可以點擊下方的地圖標記來查看景點詳情，或透過按鈕篩選特定國家的景點卡片。</p>
+                </div>
 
-晚上：晚餐推薦 Rozengrals（中世風餐廳）或 Folkklubs Ala Pagrabs（地道拉脫維亞菜與酒館氛圍）。`
-    },
-    {
-      day: 5,
-      title: "Day 5：里加舊城深度走讀",
-      content: `上午：聖彼得教堂登塔、市政廳廣場、黑頭宮、羅蘭雕像、槍手廣場拍照。
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-4 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold text-center mb-4">立陶宛景點</h3>
+                        <div id="lithuania-attraction-map-container" class="attraction-country-map-container bg-green-50"></div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold text-center mb-4">拉脫維亞景點</h3>
+                        <div id="latvia-attraction-map-container" class="attraction-country-map-container bg-orange-50"></div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold text-center mb-4">愛沙尼亞景點</h3>
+                        <div id="estonia-attraction-map-container" class="attraction-country-map-container bg-teal-50"></div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold text-center mb-4">芬蘭景點</h3>
+                        <div id="finland-attraction-map-container" class="attraction-country-map-container bg-blue-50"></div>
+                    </div>
+                </div>
 
-下午：走訪新藝術建築群（Alberta iela / Art Nouveau）、里加城堡 / 里加主教座堂。可加去里加火藥塔與里加貓之屋拍照留念。
+                <div id="attractions-filter-container" class="mt-6 flex justify-center space-x-2 overflow-x-auto mb-8">
+                    <button class="attractions-filter-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full" data-filter="all">全部</button>
+                    <button class="attractions-filter-btn bg-green-100 hover:bg-green-200 text-green-800 font-bold py-2 px-4 rounded-full" data-filter="lithuania">立陶宛</button>
+                    <button class="attractions-filter-btn bg-orange-100 hover:bg-orange-200 text-orange-800 font-bold py-2 px-4 rounded-full" data-filter="latvia">拉脫維亞</button>
+                    <button class="attractions-filter-btn bg-teal-100 hover:bg-teal-200 text-teal-800 font-bold py-2 px-4 rounded-full" data-filter="estonia">愛沙尼亞</button>
+                    <button class="attractions-filter-btn bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold py-2 px-4 rounded-full" data-filter="finland">芬蘭</button>
+                </div>
+                <div id="attractions-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                </div>
+            </section>
 
-晚上：嘗試 Vincents（高端現代料理）或老城小館。`
-    },
-    {
-      day: 6,
-      title: "Day 6：里加周邊 / 市場與文化",
-      content: `上午：里加中央市場（當地食品、冷熏魚、黑麥麵包）→ 午餐在市場或附近小館。
+            <section id="cuisine" class="content-section">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold mb-2">品味當地美食</h2>
+                    <p class="text-gray-600 max-w-3xl mx-auto">波羅的海三小國與芬蘭的料理融合了北歐與東歐的風味，獨具特色。在此探索各國的招牌菜餚、餐廳與咖啡館，點擊卡片了解更多，讓您的味蕾也踏上旅程！</p>
+                    <div id="cuisine-filter-container" class="mt-6 flex justify-center space-x-2 overflow-x-auto">
+                        <button class="cuisine-filter-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full active-filter" data-filter="all">全部</button>
+                        <button class="cuisine-filter-btn bg-green-100 hover:bg-green-200 text-green-800 font-bold py-2 px-4 rounded-full inactive-filter" data-filter="lithuania">立陶宛</button>
+                        <button class="cuisine-filter-btn bg-orange-100 hover:bg-orange-200 text-orange-800 font-bold py-2 px-4 rounded-full inactive-filter" data-filter="latvia">拉脫維亞</button>
+                        <button class="cuisine-filter-btn bg-teal-100 hover:bg-teal-200 text-teal-800 font-bold py-2 px-4 rounded-full inactive-filter" data-filter="estonia">愛沙尼亞</button>
+                        <button class="cuisine-filter-btn bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold py-2 px-4 rounded-full inactive-filter" data-filter="finland">芬蘭</button>
+                        <button class="cuisine-filter-btn bg-purple-100 hover:bg-purple-200 text-purple-800 font-bold py-2 px-4 rounded-full inactive-filter" data-filter="restaurant">餐廳</button>
+                        <button class="cuisine-filter-btn bg-pink-100 hover:bg-pink-200 text-pink-800 font-bold py-2 px-4 rounded-full inactive-filter" data-filter="traditional">傳統菜餚</button>
+                    </div>
+                </div>
+                <div id="cuisine-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                </div>
+            </section>
 
-下午：可選行程：去古鎮 Kuldīga（半日—需安排交通）或在里加博物館/歌劇院看場演出。
+            <section id="museums" class="content-section">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold mb-2">探索博物館與美術館</h2>
+                    <p class="text-gray-600 max-w-3xl mx-auto">波羅的海三小國與芬蘭擁有豐富的歷史和藝術寶藏。本區塊將帶您走進各國的博物館和美術館，感受其獨特的文化氛蘊。您可以透過下方的按鈕篩選特定國家的展館。</p>
+                    <div id="museums-filter-container" class="mt-6 flex justify-center space-x-2 overflow-x-auto">
+                        <button class="museums-filter-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full" data-filter="all">全部</button>
+                        <button class="museums-filter-btn bg-green-100 hover:bg-green-200 text-green-800 font-bold py-2 px-4 rounded-full" data-filter="lithuania">立陶宛</button>
+                        <button class="museums-filter-btn bg-orange-100 hover:bg-orange-200 text-orange-800 font-bold py-2 px-4 rounded-full" data-filter="latvia">拉脫維亞</button>
+                        <button class="museums-filter-btn bg-teal-100 hover:bg-teal-200 text-teal-800 font-bold py-2 px-4 rounded-full" data-filter="estonia">愛沙尼亞</button>
+                        <button class="museums-filter-btn bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold py-2 px-4 rounded-full" data-filter="finland">芬蘭</button>
+                    </div>
+                </div>
+                <div id="museums-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                </div>
+            </section>
 
-晚上：里加舊城酒吧或主題餐廳。`
-    },
-    {
-      day: 7,
-      title: "Day 7：里加 → 塔林（北上）",
-      content: `早上出發：搭乘火車或巴士前往塔林（車程約 4 小時左右，視班次），或選飛行（短程但不一定省時）。
+            <section id="transport" class="content-section">
+                 <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold mb-2">交通完全攻略</h2>
+                    <p class="text-gray-600 max-w-3xl mx-auto">規劃行程，交通先行。本區塊為您詳細解析波羅的海三小國與芬蘭的國際與國內交通方式，並透過圖表比較主要城市間的交通時間，助您輕鬆安排順暢的旅程。</p>
+                </div>
+                <div class="grid lg:grid-cols-5 gap-8">
+                    <div class="lg:col-span-3 bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-2xl font-bold mb-4">城際交通</h3>
+                        <ul id="intercity-transport-list" class="space-y-4"></ul>
+                        <h3 class="text-2xl font-bold mt-8 mb-4">城市內部交通</h3>
+                        <div id="local-transport-accordion"></div>
+                    </div>
+                    <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold text-center mb-4">首都間巴士/渡輪交通時間 (小時)</h3>
+                        <div class="chart-container h-64 md:h-80">
+                            <canvas id="transport-time-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-下午：抵達塔林後入住、先在下城區（Old Town）散步：維魯門（Viru Gate）、市政廳廣場、大基爾特之屋 / 黑頭宮（Blackheads）、聖奧拉夫教堂、三姊妹、市政廳藥局、聖尼古拉教堂（Kiek in de Kök / 博物館）等。
+            <section id="info" class="content-section">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold mb-2">住宿推薦與省錢提示</h2>
+                    <p class="text-gray-600 max-w-3xl mx-auto">一個舒適的落腳點與聰明的旅行訣竅能讓旅程更加分。這裡整理了各國的住宿建議和實用的省錢小技巧，讓您的旅途既舒適又經濟。</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-2xl font-bold mb-4">住宿推薦</h3>
+                        <div id="accommodation-list" class="space-y-4"></div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-2xl font-bold mb-4">省錢小訣竅</h3>
+                        <ul id="tips-list" class="space-y-3 list-disc list-inside text-gray-700"></ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
 
-晚上：晚餐推薦 Rataskaevu 16（老城名店）或當地米其林推薦餐廳列表。`
-    },
-    {
-      day: 8,
-      title: "Day 8：塔林上城（Toompea）與觀景台",
-      content: `上午：上城（Toompea）看自由廣場、聖約翰教堂、座堂山城堡（Toompea Castle）。前往 Patkuli / Kohtuotsa / Kohtuotsa 觀景台、帕特苦莉（Patkuli）。
+    <div id="modal" class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
+        <div class="bg-white rounded-lg shadow-2xl w-11/12 md:max-w-2xl max-h-[80vh] overflow-y-auto">
+            <div class="sticky top-0 bg-white p-4 border-b flex justify-between items-center">
+                <h3 id="modal-title" class="text-2xl font-bold"></h3>
+                <button id="modal-close" class="text-gray-500 hover:text-gray-800 text-3xl">&times;</button>
+            </div>
+            <div id="modal-body" class="p-6">
+                <!-- Content will be injected here -->
+            </div>
+            <div class="p-4 border-t flex justify-center">
+                <button id="gemini-suggest-btn" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-full hover:bg-blue-700 transition-colors duration-200 flex items-center">
+                    ✨ 獲取更多資訊
+                    <span id="gemini-loading-spinner" class="loading-spinner hidden"></span>
+                </button>
+            </div>
+        </div>
+    </div>
 
-下午：參觀亞歷山大涅夫斯基主教座堂、塔林聖母主教座堂，若感興趣進防禦工事博物館（Kiek in de Kök / 城牆博物館）。
+    <script>
+        const mainData = {
+            attractions: [
+                { country: 'lithuania', title: '維爾紐斯老城', content: '歐洲最大的舊城區之一，也是世界文化遺產。', mapPos: { top: '60%', left: '70%' } },
+                { country: 'lithuania', title: '維爾紐斯大教堂', content: '立陶宛最重要的羅馬天主教大教堂之一，建築宏偉莊嚴。', mapPos: { top: '65%', left: '75%' } },
+                { country: 'lithuania', title: '維爾紐斯大學院落', content: '歷史悠久的大學，由多個美麗的院落組成。', mapPos: { top: '62%', left: '72%' } },
+                { country: 'lithuania', title: '文學街', content: '充滿藝術氣息的小巷，牆上裝飾著紀念文人作家的作品。', mapPos: { top: '64%', left: '70%' } },
+                { country: 'lithuania', title: '格迪米納斯塔樓', content: '維爾紐斯的地標，曾是上城堡的一部分，現為博物館，可俯瞰城市全景。', mapPos: { top: '58%', left: '78%' } },
+                { country: 'lithuania', title: '簽署之屋', content: '立陶宛獨立宣言簽署的地方，現為博物館。', mapPos: { top: '61%', left: '73%' } },
+                { country: 'lithuania', title: '特拉凱水上城堡', content: '位於湖中的童話般城堡，是立陶宛的標誌性景點。', mapPos: { top: '70%', left: '60%' } },
 
-晚上：在舊城享用晚餐，或到 Telliskivi Creative City（卡拉馬亞 / 創意園區）晚逛、喝調酒。`
-    },
-    {
-      day: 9,
-      title: "Day 9：塔林：創意區 + 戶外博物館 + 輕鬆漫遊",
-      content: `上午：Telliskivi Creative City（設計小店、咖啡館、街頭藝術）。
+                { country: 'latvia', title: '里加舊城區', content: '世界文化遺產，以其豐富的新藝術建築風格而聞名。必訪景點包括聖彼得教堂、黑頭宮。', mapPos: { top: '40%', left: '50%' } },
+                { country: 'latvia', title: '自由紀念碑', content: '紀念拉脫維亞獨立戰爭中犧牲的士兵，是里加重要的地標。', mapPos: { top: '45%', left: '55%' } },
+                { country: 'latvia', title: '中央市場', content: '由齊柏林飛艇機庫改建而成，是歐洲最大的市場之一。', mapPos: { top: '50%', left: '50%' } },
+                { country: 'latvia', title: '新藝術建築群 (Alberta iela)', content: '里加擁有世界上最集中的新藝術建築群，漫步其中感受獨特風格。', mapPos: { top: '35%', left: '48%' } },
+                { country: 'latvia', title: '里加城堡', content: '現為拉脫維亞總統的官邸和拉脫維亞國家歷史博物館所在地。', mapPos: { top: '38%', left: '45%' } },
+                { country: 'latvia', title: '里加貓之屋', content: '以屋頂上的貓雕像聞名，背後有一段有趣的傳說。', mapPos: { top: '42%', left: '48%' } },
 
-下午：愛沙尼亞戶外博物館（Estonian Open Air Museum）（民俗建築、風情展示）或到 Kumu（愛沙尼亞藝術博物館）。
+                { country: 'estonia', title: '塔林老城區', content: '被聯合國教科文組織列為世界文化遺產，保存完好的中世紀古城。', mapPos: { top: '20%', left: '70%' } },
+                { country: 'estonia', title: '維魯門', content: '塔林老城區的主要入口之一，兩側的圓形塔樓是其標誌。', mapPos: { top: '22%', left: '72%' } },
+                { country: 'estonia', title: '市政廳廣場', content: '老城的中心，周圍有中世紀建築和歐洲最古老的藥局。', mapPos: { top: '24%', left: '70%' } },
+                { country: 'estonia', title: '大基爾特之屋', content: '中世紀商人行會的總部，現為愛沙尼亞歷史博物館的一部分。', mapPos: { top: '23%', left: '68%' } },
+                { country: 'estonia', title: '聖尼古拉教堂 (Kiek in de Kök)', content: '曾是防禦塔，現為博物館，可了解塔林歷史。', mapPos: { top: '26%', left: '65%' } },
+                { country: 'estonia', title: '上城（Toompea）', content: '位於山丘上的老城區，有多個觀景台，可俯瞰塔林全景。', mapPos: { top: '18%', left: '65%' } },
+                { country: 'estonia', title: '亞歷山大涅夫斯基主教座堂', content: '上城中宏偉的東正教大教堂，建於沙皇時代。', mapPos: { top: '16%', left: '68%' } },
+                { country: 'estonia', title: '塔林聖母主教座堂', content: '塔林最古老的教堂，以其收藏的貴族徽章聞名。', mapPos: { top: '17%', left: '66%' } },
+                { country: 'estonia', title: 'Telliskivi Creative City', content: '塔林新興的創意街區，充滿設計商店、咖啡館和街頭藝術。', mapPos: { top: '30%', left: '60%' } },
+                { country: 'estonia', title: '愛沙尼亞戶外博物館', content: '展示愛沙尼亞鄉村生活歷史，有各種傳統建築和農舍。', mapPos: { top: '40%', left: '80%' } },
+                { country: 'estonia', title: 'Lahemaa 國家公園', content: '擁有森林、沼澤、海岸線和莊園的自然公園。', mapPos: { top: '10%', left: '80%' } },
+                { country: 'finland', title: '參議院廣場與赫爾辛基主教座堂', content: '赫爾辛基的中心地帶，新古典主義建築群宏偉壯觀。', mapPos: { top: '50%', left: '50%' } },
+                { country: 'finland', title: '老市場廣場', content: '赫爾辛基港口的露天市場，有許多小吃攤和紀念品店。', mapPos: { top: '55%', left: '55%' } },
+                { country: 'finland', title: '烏斯佩斯基大教堂', content: '西歐最大的東正教堂，紅磚外觀十分顯眼。', mapPos: { top: '52%', left: '58%' } },
+                { country: 'finland', title: '岩石教堂', content: '直接在花崗岩中鑿建而成的獨特教堂，自然採光極佳。', mapPos: { top: '45%', left: '40%' } },
+                { country: 'finland', title: '西貝流士紀念碑', content: '紀念芬蘭最著名的作曲家西貝流士，由數百根鋼管組成。', mapPos: { top: '40%', left: '30%' } },
+                { country: 'finland', title: '芬蘭堡', content: '被列為世界遺產的海上要塞，由數座島嶼組成，可搭乘渡輪前往。', mapPos: { top: '60%', left: '65%' } },
+                { country: 'finland', title: '波爾沃 (Porvoo)', content: '芬蘭第二古老的城市，以其老城區的紅色木屋聞名。', mapPos: { top: '70%', left: '80%' } }
+            ],
+            cuisine: [
+                { country: 'lithuania', type: 'restaurant', name: 'Ertlio Namas', description: '提供帶有歷史感的傳統立陶宛菜，用餐環境典雅。' },
+                { country: 'lithuania', type: 'restaurant', name: 'Amandus', description: '維爾紐斯的創新料理名店，提供精緻的當代菜餚。' },
+                { country: 'lithuania', type: 'restaurant', name: 'Džiaugsmas', description: '米其林推薦的立陶宛新派料理，建議預約。' },
+                { country: 'lithuania', type: 'restaurant', name: 'Gastronomika', description: '一家評價很高的當代餐廳，提供獨特的用餐體驗。' },
+                { country: 'lithuania', type: 'traditional', name: '基爾德 (Kybyns)', description: '克里米亞塔塔人帶來的特色小吃，類似肉餡餅，在特拉凱很受歡迎。' },
+                { country: 'lithuania', type: 'traditional', name: '馬鈴薯香腸 (Vėdarai)', description: '由磨碎的馬鈴薯、培根和洋蔥製成的香腸。' },
+                { country: 'lithuania', type: 'traditional', name: '甜菜根湯 (Šaltibarščiai)', description: '立陶宛的經典冷湯，顏色鮮豔，夏季食用。' },
+                { country: 'lithuania', type: 'traditional', name: '肉圓 (Cepelinai)', description: '立陶宛的國菜，馬鈴薯餃子，內餡通常是肉末或奶酪。' },
 
-晚上：可選海邊餐廳（如 NOA/海景餐廳）或老城小館。`
-    },
-    {
-      day: 10,
-      title: "Day 10：塔林可選延伸（Lahemaa 國家公園或帕爾努）",
-      content: `選 A（自然與莊園）：Lahemaa National Park 一日遊（古莊園、森林與海岸，距塔林約 1 小時車程） — 適合想看愛沙尼亞鄉野風情的旅客。
+                { country: 'latvia', type: 'restaurant', name: 'Rozengrals', description: '氣氛滿點的中世紀主題餐廳，提供豐富的歷史用餐體驗。' },
+                { country: 'latvia', type: 'restaurant', name: 'Folkklubs Ala Pagrabs', description: '地道的拉脫維亞菜與酒館氛圍，是體驗當地文化的好地方。' },
+                { country: 'latvia', type: 'restaurant', name: 'Vincents', description: '里加的高端現代料理餐廳，以其創新的烹飪風格聞名。' },
+                { country: 'latvia', type: 'traditional', name: '黑麵包布丁 (Maizes zupa)', description: '一種由黑麵包、乾果、香料和鮮奶油製成的獨特甜點。' },
+                { country: 'latvia', type: 'traditional', name: '灰豌豆配培根 (Pelēkie zirņi ar speķi)', description: '拉脫維亞的傳統主食，由灰豌豆和燻培根製成。' },
+                { country: 'latvia', type: 'traditional', name: '里加黑藥酒 (Rīgas Melnais balzams)', description: '一種傳統的拉脫維亞草本利口酒。' },
 
-選 B（海濱小鎮）：帕爾努（Pärnu）海灘、悠閒小鎮（夏季特別適合）。
+                { country: 'estonia', type: 'restaurant', name: 'Rataskaevu 16', description: '塔林老城內口碑極佳的名店，氣氛溫暖，菜餚美味。' },
+                { country: 'estonia', type: 'restaurant', name: 'NOA Restaurant', description: '位於塔林郊區的海景餐廳，提供精緻的北歐料理。' },
+                { country: 'estonia', type: 'traditional', name: '血布丁 (Verivorst)', description: '愛沙尼亞的傳統聖誕食物，由豬血、大麥和香料製成。' },
+                { country: 'estonia', type: 'traditional', name: '黑麵包 (Rukkileib)', description: '愛沙尼亞飲食的基石，一種濃郁、略帶酸味的裸麥麵包。' },
+                { country: 'estonia', type: 'coffee', name: 'RØST Bakery', description: '塔林最受歡迎的肉桂捲，搭配精品手沖咖啡。' },
+                { country: 'estonia', type: 'coffee', name: 'Epic Coffee', description: '老城內的質感咖啡館，適合午後小憩。' },
 
-晚上：回塔林或在當地過夜，享用當地餐廳。`
-    },
-    {
-      day: 11,
-      title: "Day 11：塔林 → 赫爾辛基（坐渡輪）",
-      content: `早上：搭塔林→赫爾辛基渡輪（航程約 2–2.5 小時，多家班次：Tallink, Viking, Eckerö 等，頻繁每日多班）。建議早點搭船，抵達後直接開始市區觀光。
+                { country: 'finland', type: 'restaurant', name: 'Savoy', description: '赫爾辛基的經典高檔餐廳，位於頂樓，可欣賞城市美景。' },
+                { country: 'finland', type: 'restaurant', name: 'Old Market Hall', description: '老市場內的小吃攤，提供當地海鮮與著名的鮭魚湯。' },
+                { country: 'finland', type: 'restaurant', name: 'Löyly / Allas Sea Pool', description: '結合芬蘭桑拿與海港餐廳的獨特體驗，需要預約。' },
+                { country: 'finland', type: 'traditional', name: '鮭魚湯 (Lohikeitto)', description: '芬蘭的代表性菜餚，用新鮮鮭魚、馬鈴薯、紅蘿蔔和奶油製成。' },
+                { country: 'finland', type: 'traditional', name: '肉桂捲 (Korvapuusti)', description: '芬蘭傳統甜點，味道濃郁且份量十足，是搭配咖啡的絕佳選擇。' },
+                { country: 'finland', type: 'coffee', name: 'Cafe Regatta', description: '西貝流士公園旁的海邊咖啡館，以其紅色的木屋和溫馨的氛圍聞名。' },
+            ],
+            museums: [
+                { country: 'lithuania', name: '琥珀博物館 (Amber Museum)', description: '展示波羅的海地區琥珀的歷史、形成和藝術品。' },
+                { country: 'lithuania', name: '簽署之屋', description: '立陶宛獨立宣言的簽署地，內部作為歷史博物館。' },
+                { country: 'estonia', name: '愛沙尼亞藝術博物館 (Kumu Kunstimuuseum)', description: '愛沙尼亞最大的藝術博物館，展示從18世紀至今的愛沙尼亞藝術。' },
+                { country: 'estonia', name: '愛沙尼亞戶外博物館', description: '展示了愛沙尼亞鄉村生活的歷史，有各種傳統建築和農舍。' },
+                { country: 'estonia', name: 'Kiek in de Kök 防禦工事博物館', description: '塔林老城區的防禦塔，展示城市的軍事歷史。' },
+                { country: 'latvia', name: '黑人頭之屋', description: '里加舊城區的標誌性建築，曾是未婚商人行會的聚會場所，現為博物館。' },
+                { country: 'finland', name: '阿黛濃美術館 (Ateneum)', description: '芬蘭國家美術館的一部分，收藏了大量的芬蘭古典藝術品。' },
+                { country: 'finland', name: '阿莫斯雷克斯美術館 (Amos Rex)', description: '赫爾辛基的現代藝術博物館，以其獨特的建築設計聞名。' }
+            ],
+            itineraryDetails: {
+                lithuania: [
+                    { day: 1, title: "抵達維爾紐斯", content: "中午抵達維爾紐斯。入住後，前往老城區（Pilies 街/市政廳廣場）散步，參觀維爾紐斯大教堂與主教座堂鐘塔。晚餐推薦 Ertlio Namas 或 Amandus。", location: "維爾紐斯" },
+                    { day: 2, title: "維爾紐斯深度探索", content: "上午參觀維爾紐斯大學院落、文學街與琥珀博物館。下午前往格迪米納斯塔，欣賞城市觀景，並漫步簽署之屋與皮利斯街。晚上可選當地小酒館或高評價餐廳 Džiaugsmas/Gastronomika。", location: "維爾紐斯" },
+                    { day: 3, title: "特拉凱一日遊", content: "從維爾紐斯搭車（約 30–45 分鐘）前往特拉凱湖中城堡。可以搭船、步行，並品嚐當地特色小吃基爾德（Kybyns）。傍晚返回維爾紐斯，在老城內享用悠閒晚餐。", location: "維爾紐斯" }
+                ],
+                latvia: [
+                    { day: 4, title: "維爾紐斯 → 里加", content: "早上搭乘長途巴士（約 4–5 小時）前往拉脫維亞首都里加。下午抵達後，先在自由紀念碑與中央市場周邊散步，再逛逛舊城外圍。晚餐推薦 Rozengrals 或 Folkklubs Ala Pagrabs。", location: "里加" },
+                    { day: 5, title: "里加舊城深度走讀", content: "上午登上聖彼得教堂登塔，俯瞰市政廳廣場、黑頭宮。下午走訪新藝術建築群（Alberta iela）與里加城堡。可別忘了去里加貓之屋拍照。晚上可選高端現代料理餐廳 Vincents。", location: "里加" },
+                    { day: 6, title: "里加周邊與文化體驗", content: "上午逛里加中央市場，品嚐當地食品。下午可選擇去古鎮 Kuldīga 或在里加歌劇院看場演出。晚上在舊城區享受晚餐或小酌一杯。", location: "里加" }
+                ],
+                estonia: [
+                    { day: 7, title: "里加 → 塔林", content: "早上搭乘長途巴士（約 4 小時）前往愛沙尼亞首都塔林。下午抵達後，先在下城區漫步，參觀維魯門、市政廳廣場、聖奧拉夫教堂。晚餐推薦 Rataskaevu 16。", location: "塔林" },
+                    { day: 8, title: "塔林上城與觀景台", content: "上午前往上城（Toompea），參觀座堂山城堡，並在 Patkuli 與 Kohtuotsa 觀景台欣賞城市美景。下午參觀亞歷山大涅夫斯基主教座堂與防禦工事博物館。晚上在 Telliskivi 創意區晚逛。", location: "塔林" },
+                    { day: 9, title: "塔林：創意區與戶外博物館", content: "上午逛 Telliskivi Creative City，探索設計小店和街頭藝術。下午可選擇參觀愛沙尼亞戶外博物館或 Kumu 美術館。晚上可在海邊餐廳 NOA 享用晚餐。", location: "塔林" },
+                    { day: 10, title: "塔林可選延伸", content: "可選擇 Lahemaa 國家公園一日遊，欣賞愛沙尼亞的鄉野風情；或前往海濱小鎮帕爾努（Pärnu）享受悠閒時光。晚上回到塔林住宿。", location: "塔林" }
+                ],
+                finland: [
+                    { day: 11, title: "塔林 → 赫爾辛基", content: "早上搭渡輪（約 2–2.5 小時）前往赫爾辛基。抵達後參觀參議院廣場、赫爾辛基主教座堂與老市場廣場。晚餐推薦 Savoy 或在 Old Market Hall 內品嚐當地美食。", location: "赫爾辛基" },
+                    { day: 12, title: "赫爾辛基深度探索", content: "上午逛赫爾辛基設計區，參觀烏斯佩斯基大教堂。下午前往岩石教堂、西貝流士紀念碑。傍晚可搭渡輪去芬蘭堡。晚上可考慮體驗 Löyly / Allas Sea Pool 的桑拿與海港餐廳。", location: "赫爾辛基" },
+                    { day: 13, title: "赫爾辛基自由日或一日短途", content: "可自由探索赫爾辛基，逛街、咖啡廳巡禮；或搭車前往芬蘭最美小鎮之一的波爾沃（Porvoo），進行半日遊。晚上享用最後一頓晚餐。", location: "赫爾辛基" },
+                    { day: 14, title: "赫爾辛基 → 離境", content: "上午可在市區慢行、購買伴手禮。下午回飯店取行李，前往機場，傍晚離境。", location: "赫爾辛基" }
+                ]
+            },
+            intercityTransport: [
+                { from: "維爾紐斯", to: "里加", method: "Lux Express / Ecolines 巴士", duration: "約 4–5 小時", link: "https://luxexpress.eu" },
+                { from: "里加", to: "塔林", method: "Lux Express / Ecolines 巴士", duration: "約 4 小時", link: "https://luxexpress.eu" },
+                { from: "塔林", to: "赫爾辛基", method: "渡輪", duration: "約 2–2.5 小時", link: "https://www.tallinksilja.com/" },
+                { from: "維爾紐斯", to: "特拉凱", method: "火車或巴士", duration: "約 30-45 分鐘", link: "https://www.traukiniobilietas.lt" },
+                { from: "赫爾辛基", to: "波爾沃", method: "巴士", duration: "約 1 小時", link: "https://www.matkahuolto.fi/" }
+            ],
+            localTransportInfo: {
+                international: {
+                    title: '🌍 國際交通',
+                    content: `
+                        <p class="mb-2"><strong>✈️ 飛機:</strong> 里加國際機場 (RIX) 是波羅的海地區最大的機場。赫爾辛基 (HEL) 則是重要的北歐樞紐。</p>
+                        <p class="mb-2"><strong>⛴️ 渡輪:</strong> 赫爾辛基 ↔ 塔林是熱門路線 (約2.5小時)。也有往返瑞典和德國的航線。</p>
+                        <p class="mb-2"><strong>🚌 巴士:</strong> 這是三小國之間最常見且方便的方式。推薦 Lux Express (豪華舒適), Ecolines, FlixBus。</p>
+                        <p class="mb-2"><strong>🚂 火車:</strong> 跨國火車服務逐漸開通，但仍不如巴士方便。芬蘭境內鐵路則相當發達。</p>
+                    `
+                },
+                city: {
+                    title: '🏙️ 城市內部交通',
+                    content: `
+                        <p class="mb-2"><strong>🚶‍♂️ 步行:</strong> 舊城區範圍不大，步行是最好的遊覽方式。</p>
+                        <p class="mb-2"><strong>🚌 公共交通:</strong> 各國首都均有電車、巴士系統。赫爾辛基地鐵系統發達，購買城市卡可享優惠。</p>
+                        <p class="mb-2"><strong>🚕 叫車服務:</strong> Bolt App 在波羅的海地區非常流行且方便。赫爾辛基則常用 HSL App。</p>
+                        <p class="mb-2"><strong>🚗 租車:</strong> 如果想深入探索郊區，租車是個好選擇。</p>
+                    `
+                }
+            },
+            accommodation: [
+                { title: '立陶宛 - 維爾紐斯', content: '舊城區及其周邊是住宿的最佳選擇。例如 Artagonist Art Hotel 地點絕佳，設計前衛。' },
+                { title: '拉脫維亞 - 里加', content: '新藝術建築區和舊城區附近有許多評價良好的酒店和公寓，例如 Grand Poet Hotel 位置優越。' },
+                { title: '愛沙尼亞 - 塔林', content: '舊城區內外都有許多選擇，從提供歷史氛圍的精品酒店到現代化的連鎖酒店。' },
+                { title: '芬蘭 - 赫爾辛基', content: '市區交通便利，選擇飯店可考慮設計區或火車站附近，例如 Hotel F6, Hotel Lilla Roberts。' },
+            ],
+            travelTips: [
+                '提前預訂跨國巴士票，通常能搶到折扣票。',
+                '塔林往返赫爾辛基的渡輪班次多，建議提早線上購票。',
+                '在城市內，如果景點集中，多利用步行或購買城市卡/交通卡。',
+                '波羅的海三國與芬蘭的咖啡館文化盛行，不妨放慢腳步，慢慢品嚐。',
+                "建議購買四國通用的 eSIM 卡，方便隨時查地圖與訂票。",
+                "各國老城區都極具魅力，建議住在城區內，更能感受清晨與夜晚的寧靜氛圍。",
+                "旅途中若想調整節奏，四國都有不少手作市集、二手市集或博物館可作為替代方案。",
+            ],
+            countryData: {
+                estonia: { name: '愛沙尼亞', capital: '塔林', size: 45339 },
+                latvia: { name: '拉脫維亞', capital: '里加', size: 64589 },
+                lithuania: { name: '立陶宛', capital: '維爾紐斯', size: 65300 },
+                finland: { name: '芬蘭', capital: '赫爾辛基', size: 338455 }
+            },
+            daysPerCountry: [3, 3, 4, 4]
+        };
 
-下午：抵達赫爾辛基後參觀參議院廣場 / 主教座堂 / 阿黛濃美術館（Ateneum / Amos Rex 的選擇）、老市場廣場（Market Square）。
+        const navButtons = document.querySelectorAll('.nav-btn');
+        const contentSections = document.querySelectorAll('.content-section');
+        const attractionsGrid = document.getElementById('attractions-grid');
+        const attractionsFilterContainer = document.getElementById('attractions-filter-container');
+        const cuisineGrid = document.getElementById('cuisine-grid');
+        const cuisineFilterContainer = document.getElementById('cuisine-filter-container');
+        const museumsGrid = document.getElementById('museums-grid');
+        const museumsFilterContainer = document.getElementById('museums-filter-container');
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+        const modalClose = document.getElementById('modal-close');
+        const mapContainer = document.getElementById('map-container');
+        const mapInfo = document.getElementById('map-info');
+        const estoniaAttractionMapContainer = document.getElementById('estonia-attraction-map-container');
+        const latviaAttractionMapContainer = document.getElementById('latvia-attraction-map-container');
+        const lithuaniaAttractionMapContainer = document.getElementById('lithuania-attraction-map-container');
+        const finlandAttractionMapContainer = document.getElementById('finland-attraction-map-container');
 
-晚上：晚餐推薦 Savoy（經典高檔）或 Old Market Hall 內的小吃攤享受當地海鮮與三文魚湯。`
-    },
-    {
-      day: 12,
-      title: "Day 12：赫爾辛基深度（設計區 + 岩石教堂）",
-      content: `上午：逛設計區（Design District）、烏斯佩斯基大教堂。
+        const itineraryContainer = document.getElementById('itinerary-content');
+        const dailyPlanCountryTabs = document.getElementById('daily-plan-country-tabs');
+        const intercityTransportList = document.getElementById('intercity-transport-list');
+        const localTransportAccordion = document.getElementById('local-transport-accordion');
+        const accommodationList = document.getElementById('accommodation-list');
+        const tipsList = document.getElementById('tips-list');
 
-下午：岩石教堂（Temppeliaukio Church）、西貝流士紀念碑、埃斯普拉納迪公園。傍晚前往芬蘭堡（Suomenlinna）（可選半日 / 傍晚漫遊）。
+        const geminiSuggestBtn = document.getElementById('gemini-suggest-btn');
+        const geminiLoadingSpinner = document.getElementById('gemini-loading-spinner');
+        let currentModalItem = null;
 
-晚上：試試當地新式料理或海港邊餐廳；若想體驗芬蘭桑拿與海港餐廳，可考慮 Löyly / Allas Sea Pool 等（需預約）。`
-    },
-    {
-      day: 13,
-      title: "Day 13：赫爾辛基自由日或一日短途（Porvoo 可選）",
-      content: `選 A：赫爾辛基自由行，購物、設計館、咖啡廳巡禮。
 
-選 B（經典）：Porvoo（波爾沃）半日：被譽為芬蘭最美小鎮之一，距赫爾辛基約 1 小時車程，適合拍照與品嚐甜點。
+        function switchTab(targetId) {
+            navButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.target === targetId);
+            });
+            contentSections.forEach(section => {
+                section.classList.toggle('active', section.id === targetId);
+            });
+            if (targetId === 'daily-plan' && itineraryContainer.innerHTML === '') {
+                renderDailyItinerary('lithuania');
+                dailyPlanCountryTabs.querySelector('[data-country="lithuania"]').classList.add('active-tab');
+                dailyPlanCountryTabs.querySelector('[data-country="lithuania"]').classList.remove('inactive-tab');
+            }
+        }
 
-晚上：最後一晚的精緻晚餐（若喜歡海鮮或北歐新料理可再挑一家評價高的餐廳訂位）。`
-    },
-    {
-      day: 14,
-      title: "Day 14：赫爾辛基（上午／下午）→ 離境（傍晚出發）",
-      content: `上午：若航班較晚，可在市區慢行、買伴手禮或到舊市場吃最後的鮭魚湯/麵包。
+        navButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                switchTab(button.dataset.target);
+            });
+        });
 
-下午：回飯店取行李、前往機場，傍晚／晚間離境。`
-    }
-  ];
+        function renderAttractions(filter = 'all') {
+            attractionsGrid.innerHTML = '';
+            const filteredData = mainData.attractions.filter(item => filter === 'all' || item.country === filter);
+            
+            filteredData.forEach(item => {
+                const card = document.createElement('div');
+                card.className = `bg-white rounded-xl shadow-md p-6 flex flex-col justify-between transition-transform hover:scale-105 country-${item.country}`;
+                card.innerHTML = `
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">${item.title}</h3>
+                        <p class="text-gray-600 mb-4">${item.content.substring(0, 50)}...</p>
+                    </div>
+                    <button class="open-modal-btn mt-4 bg-gray-800 text-white font-bold py-2 px-4 rounded-full self-start hover:bg-gray-700">查看詳情</button>
+                `;
+                card.querySelector('.open-modal-btn').addEventListener('click', () => {
+                    modalTitle.textContent = item.title;
+                    modalBody.innerHTML = `<p>${item.content}</p>`;
+                    geminiSuggestBtn.style.display = 'none';
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                });
+                attractionsGrid.appendChild(card);
+            });
+        }
 
-  const dayListEl = document.getElementById("day-list");
-  const dayTitleEl = document.getElementById("day-title");
-  const dayContentEl = document.getElementById("day-content");
+        attractionsFilterContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('attractions-filter-btn')) {
+                attractionsFilterContainer.querySelectorAll('.attractions-filter-btn').forEach(btn => {
+                    btn.classList.remove('active-filter');
+                    btn.classList.add('inactive-filter');
+                });
+                e.target.classList.add('active-filter');
+                e.target.classList.remove('inactive-filter');
+                renderAttractions(e.target.dataset.filter);
+            }
+        });
 
-  // 建立側邊欄按鈕
-  itinerary.forEach(({ day, title }) => {
-    const li = document.createElement("li");
-    const btn = document.createElement("button");
-    btn.textContent = `${title}`;
-    btn.addEventListener("click", () => {
-      showDay(day);
-      setActiveButton(btn);
-    });
-    li.appendChild(btn);
-    dayListEl.appendChild(li);
-  });
+        function renderCuisine(filter = 'all') {
+            cuisineGrid.innerHTML = '';
+            const filteredData = mainData.cuisine.filter(item => {
+                if (filter === 'all') {
+                    return true;
+                } else if (['lithuania', 'latvia', 'estonia', 'finland'].includes(filter)) {
+                    return item.country === filter;
+                } else if (['restaurant', 'coffee', 'traditional'].includes(filter)) {
+                    return item.type === filter;
+                }
+                return false;
+            });
 
-  function showDay(day) {
-    const dayData = itinerary.find(d => d.day === day);
-    if (!dayData) return;
-    dayTitleEl.textContent = dayData.title;
-    // 將換行字串用<p>包起來
-    const paragraphs = dayData.content.split('\n').filter(p => p.trim() !== '');
-    dayContentEl.innerHTML = paragraphs.map(p => `<p>${p.trim()}</p>`).join('');
-  }
+            filteredData.forEach(item => {
+                const card = document.createElement('div');
+                card.className = `bg-white rounded-xl shadow-md p-6 flex flex-col justify-between transition-transform hover:scale-105 country-${item.country}`;
+                card.innerHTML = `
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">${item.name}</h3>
+                        <p class="text-gray-600 mb-4">${item.description.substring(0, 50)}...</p>
+                    </div>
+                    <button class="open-modal-btn mt-4 bg-gray-800 text-white font-bold py-2 px-4 rounded-full self-start hover:bg-gray-700"
+                            data-item-name="${item.name}" data-item-description="${item.description}">查看詳情</button>
+                `;
+                card.querySelector('.open-modal-btn').addEventListener('click', (e) => {
+                    const itemName = e.target.dataset.itemName;
+                    const itemDescription = e.target.dataset.itemDescription;
+                    modalTitle.textContent = itemName;
+                    modalBody.innerHTML = `<p>${itemDescription}</p>`;
+                    
+                    currentModalItem = { name: itemName, description: itemDescription };
+                    geminiSuggestBtn.style.display = 'flex';
+                    geminiSuggestBtn.disabled = false;
+                    geminiLoadingSpinner.classList.add('hidden');
 
-  function setActiveButton(activeBtn) {
-    const buttons = dayListEl.querySelectorAll("button");
-    buttons.forEach(btn => {
-      btn.classList.toggle("active", btn === activeBtn);
-    });
-  }
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                });
+                cuisineGrid.appendChild(card);
+            });
+        }
 
-  // 預設顯示第一天
-  dayListEl.querySelector("button").click();
-</script>
+        cuisineFilterContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('cuisine-filter-btn')) {
+                cuisineFilterContainer.querySelectorAll('.cuisine-filter-btn').forEach(btn => {
+                    btn.classList.remove('active-filter');
+                    btn.classList.add('inactive-filter');
+                });
+                e.target.classList.add('active-filter');
+                e.target.classList.remove('inactive-filter');
+
+                renderCuisine(e.target.dataset.filter);
+            }
+        });
+
+        function renderMuseums(filter = 'all') {
+            museumsGrid.innerHTML = '';
+            const filteredData = mainData.museums.filter(item => filter === 'all' || item.country === filter);
+
+            filteredData.forEach(item => {
+                const card = document.createElement('div');
+                card.className = `bg-white rounded-xl shadow-md p-6 flex flex-col justify-between transition-transform hover:scale-105 country-${item.country}`;
+                card.innerHTML = `
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">${item.name}</h3>
+                        <p class="text-gray-600 mb-4">${item.description.substring(0, 50)}...</p>
+                    </div>
+                    <button class="open-modal-btn mt-4 bg-gray-800 text-white font-bold py-2 px-4 rounded-full self-start hover:bg-gray-700">查看詳情</button>
+                `;
+                card.querySelector('.open-modal-btn').addEventListener('click', () => {
+                    modalTitle.textContent = item.name;
+                    modalBody.innerHTML = `<p>${item.description}</p>`;
+                    geminiSuggestBtn.style.display = 'none';
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                });
+                museumsGrid.appendChild(card);
+            });
+        }
+
+        museumsFilterContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('museums-filter-btn')) {
+                museumsFilterContainer.querySelectorAll('.museums-filter-btn').forEach(btn => {
+                    btn.classList.remove('active-filter');
+                    btn.classList.add('inactive-filter');
+                });
+                e.target.classList.add('active-filter');
+                e.target.classList.remove('inactive-filter');
+
+                renderMuseums(e.target.dataset.filter);
+            }
+        });
+
+
+        modalClose.addEventListener('click', () => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            currentModalItem = null;
+        });
+        
+        modal.addEventListener('click', (e) => {
+            if(e.target === modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                currentModalItem = null;
+            }
+        });
+
+        mapContainer.addEventListener('click', (e) => {
+            const countryDiv = e.target.closest('.map-country');
+            if (countryDiv) {
+                const countryId = countryDiv.dataset.country;
+                mapInfo.textContent = `${mainData.countryData[countryId].name} 的首都是 ${mainData.countryData[countryId].capital}`;
+            }
+        });
+
+        function renderLocalTransportAccordion() {
+            localTransportAccordion.innerHTML = '';
+            const items = [mainData.localTransportInfo.international, mainData.localTransportInfo.city];
+            localTransportAccordion.innerHTML = items.map((item, index) => `
+                <div class="border-b">
+                    <button class="accordion-btn w-full text-left p-4 text-xl font-semibold flex justify-between items-center hover:bg-gray-50">
+                        <span>${item.title}</span>
+                        <span class="transform transition-transform ${index === 0 ? '' : 'rotate-180'}">▼</span>
+                    </button>
+                    <div class="accordion-content overflow-hidden transition-all duration-500 ease-in-out ${index === 0 ? 'max-h-96' : 'max-h-0'}">
+                        <div class="p-4 text-gray-700">${item.content}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            localTransportAccordion.querySelectorAll('.accordion-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const content = btn.nextElementSibling;
+                    const icon = btn.querySelector('span:last-child');
+                    if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+                        content.style.maxHeight = '0px';
+                        icon.style.transform = 'rotate(180deg)';
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                        icon.style.transform = 'rotate(0deg)';
+                    }
+                });
+            });
+        }
+
+        function renderAccommodationList() {
+            accommodationList.innerHTML = mainData.accommodation.map(item => `
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h4 class="font-bold text-lg">${item.title}</h4>
+                    <p class="text-gray-600">${item.content}</p>
+                </div>
+            `).join('');
+        }
+
+        function renderTipsList() {
+            tipsList.innerHTML = mainData.travelTips.map(tip => `<li class="flex items-start"><span class="mr-2 mt-1">💡</span><span>${tip}</span></li>`).join('');
+        }
+        
+        function createCountrySizeChart() {
+            const ctx = document.getElementById('country-size-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [mainData.countryData.lithuania.name, mainData.countryData.latvia.name, mainData.countryData.estonia.name, mainData.countryData.finland.name],
+                    datasets: [{
+                        label: '國土面積 (km²)',
+                        data: [mainData.countryData.lithuania.size, mainData.countryData.latvia.size, mainData.countryData.estonia.size, mainData.countryData.finland.size],
+                        backgroundColor: ['rgba(34, 197, 94, 0.6)', 'rgba(249, 115, 22, 0.6)', 'rgba(20, 184, 166, 0.6)', 'rgba(59, 130, 246, 0.6)'],
+                        borderColor: ['rgb(34, 197, 94)', 'rgb(249, 115, 22)', 'rgb(20, 184, 166)', 'rgb(59, 130, 246)'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('en-US').format(context.parsed.y) + ' km²';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#e5e7eb' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createTransportTimeChart() {
+            const ctx = document.getElementById('transport-time-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['維爾紐斯 ↔ 里加', '里加 ↔ 塔林', '塔林 ↔ 赫爾辛基'],
+                    datasets: [{
+                        label: '交通時間 (小時)',
+                        data: [4.5, 4, 2.5],
+                        backgroundColor: ['rgba(59, 130, 246, 0.6)', 'rgba(139, 92, 246, 0.6)', 'rgba(239, 68, 68, 0.6)'],
+                        borderColor: ['rgb(59, 130, 246)', 'rgb(139, 92, 246)', 'rgb(239, 68, 68)'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            grid: { color: '#e5e7eb' }
+                        },
+                        y: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderAttractionMap() {
+            estoniaAttractionMapContainer.innerHTML = '';
+            latviaAttractionMapContainer.innerHTML = '';
+            lithuaniaAttractionMapContainer.innerHTML = '';
+            finlandAttractionMapContainer.innerHTML = '';
+
+            mainData.attractions.forEach((attraction) => {
+                const marker = document.createElement('div');
+                marker.className = 'map-marker';
+                marker.style.top = attraction.mapPos.top;
+                marker.style.left = attraction.mapPos.left;
+                marker.title = attraction.title;
+
+                marker.addEventListener('click', () => {
+                    modalTitle.textContent = attraction.title;
+                    modalBody.innerHTML = `<p>${attraction.content}</p>`;
+                    geminiSuggestBtn.style.display = 'none';
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                });
+
+                let targetContainer;
+                if (attraction.country === 'estonia') {
+                    targetContainer = estoniaAttractionMapContainer;
+                } else if (attraction.country === 'latvia') {
+                    targetContainer = latviaAttractionMapContainer;
+                } else if (attraction.country === 'lithuania') {
+                    targetContainer = lithuaniaAttractionMapContainer;
+                } else if (attraction.country === 'finland') {
+                    targetContainer = finlandAttractionMapContainer;
+                }
+                if (targetContainer) {
+                    targetContainer.appendChild(marker);
+                }
+            });
+        }
+
+        const renderDailyItinerary = (country) => {
+            const data = mainData.itineraryDetails[country] || [];
+            itineraryContainer.innerHTML = data.map(item => `
+                <div class="mb-4 border border-gray-200 rounded-lg bg-white shadow-sm">
+                    <button class="accordion-button w-full text-left p-4 flex justify-between items-center transition duration-300 hover:bg-teal-50">
+                        <span class="font-semibold text-lg text-stone-800">Day ${item.day}: ${item.title}</span>
+                        <span class="accordion-icon text-teal-600 font-bold text-2xl transform transition-transform duration-300">-</span>
+                    </button>
+                    <div class="accordion-content px-4 pb-4 text-stone-600">
+                        <p>${item.content}</p>
+                        <p class="mt-2 text-sm text-teal-700 font-semibold">📍 當日住宿地點: ${item.location}</p>
+                    </div>
+                </div>
+            `).join('');
+            addAccordionListeners();
+        };
+        
+        const addAccordionListeners = () => {
+            const buttons = document.querySelectorAll('.accordion-button');
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const content = button.nextElementSibling;
+                    const icon = button.querySelector('.accordion-icon');
+                    const isOpen = content.classList.contains('open');
+
+                    document.querySelectorAll('.accordion-content.open').forEach(openContent => {
+                        if (openContent !== content) { 
+                            openContent.classList.remove('open');
+                            openContent.previousElementSibling.querySelector('.accordion-icon').textContent = '+';
+                        }
+                    });
+                    
+                    if (!isOpen) {
+                        content.classList.add('open');
+                        icon.textContent = '-';
+                    } else {
+                        content.classList.remove('open');
+                        icon.textContent = '+';
+                    }
+                });
+            });
+            const firstAccordion = document.querySelector('.accordion-content');
+            if(firstAccordion) {
+                firstAccordion.classList.add('open');
+                firstAccordion.previousElementSibling.querySelector('.accordion-icon').textContent = '-';
+            }
+        };
+
+        const renderIntercityTransport = () => {
+            intercityTransportList.innerHTML = mainData.intercityTransport.map(item => `
+                <li class="border-b border-gray-200 pb-3">
+                    <p class="font-semibold text-stone-800">${item.from} → ${item.to}</p>
+                    <p class="text-sm text-stone-600">${item.method} (${item.duration})</p>
+                    <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="text-sm text-teal-600 hover:text-teal-800 hover:underline">查詢班次 →</a>
+                </li>
+            `).join('');
+        };
+
+        const createDaysPerCountryChart = () => {
+            const ctx = document.getElementById('daysPerCountryChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['🇱🇹 立陶宛', '🇱🇻 拉脫維亞', '🇪🇪 愛沙尼亞', '🇫🇮 芬蘭'],
+                    datasets: [{
+                        label: '停留天數',
+                        data: mainData.daysPerCountry,
+                        backgroundColor: [
+                            'rgba(15, 118, 110, 0.7)',
+                            'rgba(13, 148, 136, 0.7)',
+                            'rgba(20, 184, 166, 0.7)',
+                            'rgba(30, 64, 175, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(15, 118, 110, 1)',
+                            'rgba(13, 148, 136, 1)',
+                            'rgba(20, 184, 166, 1)',
+                            'rgba(30, 64, 175, 1)'
+                        ],
+                        borderWidth: 1,
+                        hoverOffset: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    family: "'Noto Sans TC', sans-serif",
+                                    size: 14
+                                },
+                                color: '#44403c'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed + ' 天';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '60%'
+                }
+            });
+        };
+
+        dailyPlanCountryTabs.querySelectorAll('.country-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                dailyPlanCountryTabs.querySelectorAll('.country-tab').forEach(t => {
+                    t.classList.remove('active-tab');
+                    t.classList.add('inactive-tab');
+                });
+                tab.classList.add('active-tab');
+                tab.classList.remove('inactive-tab');
+                renderDailyItinerary(tab.dataset.country);
+            });
+        });
+
+        geminiSuggestBtn.addEventListener('click', async () => {
+            if (!currentModalItem) return;
+
+            geminiSuggestBtn.disabled = true;
+            geminiLoadingSpinner.classList.remove('hidden');
+
+            const prompt = `請提供關於「${currentModalItem.name}」（描述：${currentModalItem.description}）的更多有趣資訊或相關背景知識。請用繁體中文回答，並保持內容簡潔易懂。`;
+
+            try {
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                const payload = { contents: chatHistory };
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    modalBody.innerHTML += `<p class="mt-4 border-t pt-4 text-gray-700"><strong>✨ 更多資訊：</strong><br>${text}</p>`;
+                } else {
+                    modalBody.innerHTML += `<p class="mt-4 border-t pt-4 text-red-500">無法獲取更多資訊，請稍後再試。</p>`;
+                }
+            } catch (error) {
+                console.error('Gemini API Error:', error);
+                modalBody.innerHTML += `<p class="mt-4 border-t pt-4 text-red-500">載入資訊時發生錯誤。</p>`;
+            } finally {
+                geminiSuggestBtn.disabled = false;
+                geminiLoadingSpinner.classList.add('hidden');
+            }
+        });
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderAttractions();
+            renderCuisine();
+            renderMuseums();
+            renderLocalTransportAccordion();
+            renderIntercityTransport();
+            renderAccommodationList();
+            renderTipsList();
+            createCountrySizeChart();
+            createTransportTimeChart();
+            renderAttractionMap();
+            createDaysPerCountryChart();
+            
+            renderDailyItinerary('lithuania');
+            dailyPlanCountryTabs.querySelector('[data-country="lithuania"]').classList.add('active-tab');
+            dailyPlanCountryTabs.querySelector('[data-country="lithuania"]').classList.remove('inactive-tab');
+        });
+    </script>
 </body>
 </html>
