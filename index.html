@@ -136,8 +136,6 @@
             <button data-target="daily-plan" class="nav-btn p-4 text-lg font-medium text-gray-500 active">每日行程</button>
             <button data-target="attractions" class="nav-btn p-4 text-lg font-medium text-gray-500">探索景點</button>
             <button data-target="cuisine" class="nav-btn p-4 text-lg font-medium text-gray-500">美食</button>
-            <button data-target="transport" class="nav-btn p-4 text-lg font-medium text-gray-500">交通攻略</button>
-            <button data-target="info" class="nav-btn p-4 text-lg font-medium text-gray-500">住宿與提示</button>
         </nav>
 
         <main>
@@ -190,44 +188,6 @@
                     </div>
                 </div>
                 <div id="cuisine-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                </div>
-            </section>
-
-            <section id="transport" class="content-section">
-                 <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold mb-2">交通完全攻略</h2>
-                    <p class="text-gray-600 max-w-3xl mx-auto">規劃行程，交通先行。本區塊為您詳細解析波羅的海三小國與芬蘭的國際與國內交通方式，並透過圖表比較主要城市間的交通時間，助您輕鬆安排順暢的旅程。</p>
-                </div>
-                <div class="grid lg:grid-cols-5 gap-8">
-                    <div class="lg:col-span-3 bg-white p-6 rounded-xl shadow-md">
-                        <h3 class="text-2xl font-bold mb-4">城際交通</h3>
-                        <ul id="intercity-transport-list" class="space-y-4"></ul>
-                        <h3 class="text-2xl font-bold mt-8 mb-4">城市內部交通</h3>
-                        <div id="local-transport-accordion"></div>
-                    </div>
-                    <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-md">
-                        <h3 class="text-xl font-bold text-center mb-4">首都間巴士/渡輪交通時間 (小時)</h3>
-                        <div class="chart-container h-64 md:h-80">
-                            <canvas id="transport-time-chart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="info" class="content-section">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold mb-2">住宿推薦與省錢提示</h2>
-                    <p class="text-gray-600 max-w-3xl mx-auto">一個舒適的落腳點與聰明的旅行訣竅能讓旅程更加分。這裡整理了各國的住宿建議和實用的省錢小技巧，讓您的旅途既舒適又經濟。</p>
-                </div>
-                <div class="grid md:grid-cols-2 gap-8">
-                    <div class="bg-white p-6 rounded-xl shadow-md">
-                        <h3 class="text-2xl font-bold mb-4">住宿推薦</h3>
-                        <div id="accommodation-list" class="space-y-4"></div>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl shadow-md">
-                        <h3 class="text-2xl font-bold mb-4">省錢小訣竅</h3>
-                        <ul id="tips-list" class="space-y-3 list-disc list-inside text-gray-700"></ul>
-                    </div>
                 </div>
             </section>
         </main>
@@ -343,48 +303,6 @@
                     { day: 14, title: "赫爾辛基 → 離境", content: "上午可在市區慢行、購買伴手禮。下午回飯店取行李，前往機場，傍晚離境。", location: "赫爾辛基" }
                 ]
             },
-            intercityTransport: [
-                { from: "維爾紐斯", to: "里加", method: "Lux Express / Ecolines 巴士", duration: "約 4–5 小時", link: "https://luxexpress.eu" },
-                { from: "里加", to: "塔林", method: "Lux Express / Ecolines 巴士", duration: "約 4 小時", link: "https://luxexpress.eu" },
-                { from: "塔林", to: "赫爾辛基", method: "渡輪", duration: "約 2–2.5 小時", link: "https://www.tallinksilja.com/" },
-                { from: "維爾紐斯", to: "特拉凱", method: "火車或巴士", duration: "約 30-45 分鐘", link: "https://www.traukiniobilietas.lt" },
-                { from: "赫爾辛基", to: "波爾沃", method: "巴士", duration: "約 1 小時", link: "https://www.matkahuolto.fi/" }
-            ],
-            localTransportInfo: {
-                international: {
-                    title: '🌍 國際交通',
-                    content: `
-                        <p class="mb-2"><strong>✈️ 飛機:</strong> 里加國際機場 (RIX) 是波羅的海地區最大的機場。赫爾辛基 (HEL) 則是重要的北歐樞紐。</p>
-                        <p class="mb-2"><strong>⛴️ 渡輪:</strong> 赫爾辛基 ↔ 塔林是熱門路線 (約2.5小時)。也有往返瑞典和德國的航線。</p>
-                        <p class="mb-2"><strong>🚌 巴士:</strong> 這是三小國之間最常見且方便的方式。推薦 Lux Express (豪華舒適), Ecolines, FlixBus。</p>
-                        <p class="mb-2"><strong>🚂 火車:</strong> 跨國火車服務逐漸開通，但仍不如巴士方便。芬蘭境內鐵路則相當發達。</p>
-                    `
-                },
-                city: {
-                    title: '🏙️ 城市內部交通',
-                    content: `
-                        <p class="mb-2"><strong>🚶‍♂️ 步行:</strong> 舊城區範圍不大，步行是最好的遊覽方式。</p>
-                        <p class="mb-2"><strong>🚌 公共交通:</strong> 各國首都均有電車、巴士系統。赫爾辛基地鐵系統發達，購買城市卡可享優惠。</p>
-                        <p class="mb-2"><strong>🚕 叫車服務:</strong> Bolt App 在波羅的海地區非常流行且方便。赫爾辛基則常用 HSL App。</p>
-                        <p class="mb-2"><strong>🚗 租車:</strong> 如果想深入探索郊區，租車是個好選擇。</p>
-                    `
-                }
-            },
-            accommodation: [
-                { title: '立陶宛 - 維爾紐斯', content: '舊城區及其周邊是住宿的最佳選擇。例如 Artagonist Art Hotel 地點絕佳，設計前衛。' },
-                { title: '拉脫維亞 - 里加', content: '新藝術建築區和舊城區附近有許多評價良好的酒店和公寓，例如 Grand Poet Hotel 位置優越。' },
-                { title: '愛沙尼亞 - 塔林', content: '舊城區內外都有許多選擇，從提供歷史氛圍的精品酒店到現代化的連鎖酒店。' },
-                { title: '芬蘭 - 赫爾辛基', content: '市區交通便利，選擇飯店可考慮設計區或火車站附近，例如 Hotel F6, Hotel Lilla Roberts。' },
-            ],
-            travelTips: [
-                '提前預訂跨國巴士票，通常能搶到折扣票。',
-                '塔林往返赫爾辛基的渡輪班次多，建議提早線上購票。',
-                '在城市內，如果景點集中，多利用步行或購買城市卡/交通卡。',
-                '波羅的海三國與芬蘭的咖啡館文化盛行，不妨放慢腳步，慢慢品嚐。',
-                "建議購買四國通用的 eSIM 卡，方便隨時查地圖與訂票。",
-                "各國老城區都極具魅力，建議住在城區內，更能感受清晨與夜晚的寧靜氛圍。",
-                "旅途中若想調整節奏，四國都有不少手作市集、二手市集或博物館可作為替代方案。",
-            ],
         };
 
         const navButtons = document.querySelectorAll('.nav-btn');
@@ -400,10 +318,6 @@
 
         const itineraryContainer = document.getElementById('itinerary-content');
         const dailyPlanCountryTabs = document.getElementById('daily-plan-country-tabs');
-        const intercityTransportList = document.getElementById('intercity-transport-list');
-        const localTransportAccordion = document.getElementById('local-transport-accordion');
-        const accommodationList = document.getElementById('accommodation-list');
-        const tipsList = document.getElementById('tips-list');
 
         const geminiSuggestBtn = document.getElementById('gemini-suggest-btn');
         const geminiLoadingSpinner = document.getElementById('gemini-loading-spinner');
@@ -536,83 +450,6 @@
             }
         });
 
-        function renderLocalTransportAccordion() {
-            localTransportAccordion.innerHTML = '';
-            const items = [mainData.localTransportInfo.international, mainData.localTransportInfo.city];
-            localTransportAccordion.innerHTML = items.map((item, index) => `
-                <div class="border-b">
-                    <button class="accordion-btn w-full text-left p-4 text-xl font-semibold flex justify-between items-center hover:bg-gray-50">
-                        <span>${item.title}</span>
-                        <span class="transform transition-transform ${index === 0 ? '' : 'rotate-180'}">▼</span>
-                    </button>
-                    <div class="accordion-content overflow-hidden transition-all duration-500 ease-in-out ${index === 0 ? 'max-h-96' : 'max-h-0'}">
-                        <div class="p-4 text-gray-700">${item.content}</div>
-                    </div>
-                </div>
-            `).join('');
-
-            localTransportAccordion.querySelectorAll('.accordion-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const content = btn.nextElementSibling;
-                    const icon = btn.querySelector('span:last-child');
-                    if (content.style.maxHeight && content.style.maxHeight !== '0px') {
-                        content.style.maxHeight = '0px';
-                        icon.style.transform = 'rotate(180deg)';
-                    } else {
-                        content.style.maxHeight = content.scrollHeight + 'px';
-                        icon.style.transform = 'rotate(0deg)';
-                    }
-                });
-            });
-        }
-
-        function renderAccommodationList() {
-            accommodationList.innerHTML = mainData.accommodation.map(item => `
-                <div class="bg-gray-50 p-4 rounded-lg">
-                    <h4 class="font-bold text-lg">${item.title}</h4>
-                    <p class="text-gray-600">${item.content}</p>
-                </div>
-            `).join('');
-        }
-
-        function renderTipsList() {
-            tipsList.innerHTML = mainData.travelTips.map(tip => `<li class="flex items-start"><span class="mr-2 mt-1">💡</span><span>${tip}</span></li>`).join('');
-        }
-        
-        function createTransportTimeChart() {
-            const ctx = document.getElementById('transport-time-chart').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['維爾紐斯 ↔ 里加', '里加 ↔ 塔林', '塔林 ↔ 赫爾辛基'],
-                    datasets: [{
-                        label: '交通時間 (小時)',
-                        data: [4.5, 4, 2.5],
-                        backgroundColor: ['rgba(59, 130, 246, 0.6)', 'rgba(139, 92, 246, 0.6)', 'rgba(239, 68, 68, 0.6)'],
-                        borderColor: ['rgb(59, 130, 246)', 'rgb(139, 92, 246)', 'rgb(239, 68, 68)'],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            grid: { color: '#e5e7eb' }
-                        },
-                        y: {
-                            grid: { display: false }
-                        }
-                    }
-                }
-            });
-        }
-
         const renderDailyItinerary = (country) => {
             const data = mainData.itineraryDetails[country] || [];
             itineraryContainer.innerHTML = data.map(item => `
@@ -659,16 +496,6 @@
                 firstAccordion.classList.add('open');
                 firstAccordion.previousElementSibling.querySelector('.accordion-icon').textContent = '-';
             }
-        };
-
-        const renderIntercityTransport = () => {
-            intercityTransportList.innerHTML = mainData.intercityTransport.map(item => `
-                <li class="border-b border-gray-200 pb-3">
-                    <p class="font-semibold text-stone-800">${item.from} → ${item.to}</p>
-                    <p class="text-sm text-stone-600">${item.method} (${item.duration})</p>
-                    <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="text-sm text-teal-600 hover:text-teal-800 hover:underline">查詢班次 →</a>
-                </li>
-            `).join('');
         };
 
         dailyPlanCountryTabs.querySelectorAll('.country-tab').forEach(tab => {
@@ -726,11 +553,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             renderAttractions();
             renderCuisine();
-            renderLocalTransportAccordion();
-            renderIntercityTransport();
-            renderAccommodationList();
-            renderTipsList();
-            createTransportTimeChart();
             
             renderDailyItinerary('lithuania');
             dailyPlanCountryTabs.querySelector('[data-country="lithuania"]').classList.add('active-tab');
